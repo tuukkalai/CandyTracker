@@ -1,0 +1,18 @@
+<h2>Create poll</h2>
+<form action="/polls/create" method="POST">
+  <table>
+    <tbody>
+      <tr>
+        <td>Topic:</td>
+        <td><input type="text" name="topic" /></td>
+      </tr>
+      {% for i in range(0,4) %}
+      <tr>
+        <td>Option {{ i+1 }}:</td>
+        <td><input type="text" name="choice" /></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <input type="submit" />
+</form>

@@ -1,0 +1,6 @@
+<title>Poll</title>
+<a href="/polls/new">Create new poll</a>
+{% for poll in polls %}
+  <hr/>
+  <a href="/polls/{{ poll[0] }}">{{ poll[1] }}</a>
+{% endfor %}
