@@ -1,8 +1,16 @@
-<h2>{{ topic }}</h2>
-{% for choice in choices %}
-  {{ choice[0] }}, {{ choice[1] }} {% if choice[1] != 1 %}votes{% else %}vote{% endif %}<br/>
-{% endfor %}
-<br/>
-<br/>
-<a href="/polls">Back to polls</a>
+{% extends 'layout.html' %}
 
+{% block header %}
+{{ topic }}
+{% endblock %}
+
+{% block content %}
+<a href="/polls">Back to polls</a>
+<br/>
+{% for choice in choices %}
+  {{ choice[0] }}
+  <div class="progress">
+    <div class="progress-bar" role="progressbar" style="width: {{ (choice[1]/total)*100 }}%" aria-valuenow="{{ choice[1] }}" aria-valuemin="0" aria-valuemax="{{ total }}">{{ choice[1] }}</div>
+  </div>
+{% endfor %}
+{% endblock %}

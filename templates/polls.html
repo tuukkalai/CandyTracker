@@ -1,6 +1,13 @@
-<title>Poll</title>
+{% extends 'layout.html' %}
+
+{% block header %}
+Poll
+{% endblock %}
+
+{% block content %}
 <a href="/polls/new">Create new poll</a>
 {% for poll in polls %}
   <hr/>
   <a href="/polls/{{ poll[0] }}">{{ poll[1] }}</a>
 {% endfor %}
+{% endblock %}

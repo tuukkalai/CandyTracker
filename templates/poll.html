@@ -1,3 +1,10 @@
+{% extends 'layout.html' %}
+
+{% block header %}
+Poll
+{% endblock %}
+
+{% block content %}
 <h2>{{ topic }}</h2>
 <p>{{ created }}</p>
 <form action="/polls/answer" method="POST">
@@ -7,3 +14,4 @@
 <input type="hidden" name="id" value="{{ id }}" />
 <input type="submit" />
 </form>
+{% endblock %}

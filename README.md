@@ -11,11 +11,18 @@ Käyttäjän on mahdollista lisätä sovellukseen makeisia, jonka jälkeen myös
 
 ## Sovelluksen suorittaminen
 
+Ensimmäisellä kerralla
+
 ```bash
 $ cd CandyTracker
 $ source venv/bin/activate
 $ pip install flask
 $ flask run
+```
+
+Seuraavilla kerroilla
+```bash
+$ flask run
 ```
 
 ## Kurssiin liittyvät vaatimukset
@@ -45,3 +52,12 @@ $ flask run
 - [ ] Salasanat tallennetaan tietokantaan asianmukaisesti
 - [ ] Versionhallinnassa ei ole salaista tietoa (kuten .env-tiedostoa)
 
+## ToDo
+
+### Views
+- [x] Frontpage (with login)
+- [ ] Profile page
+- [ ] Add entry to diary
+- [ ] Add candy
+- [x] 404
+- [ ] Feed (?)

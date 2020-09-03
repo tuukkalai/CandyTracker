@@ -12,9 +12,8 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
 @app.route("/")
-def index():
-    words = ["apina","banaani","cembalo"]
-    return render_template("index.html",message="Tervetuloa!",items=words)
+def home():
+    return render_template("home.html")
 
 @app.route("/order")
 def form():
@@ -87,7 +86,10 @@ def showResults(id):
     sql = "SELECT c.choice, COUNT(a.id) FROM choices c LEFT JOIN answers a ON c.id = a.choice_id WHERE c.poll_id=:poll_id GROUP BY c.id"
     result = db.session.execute(sql, {"poll_id":id})
     choices = result.fetchall()
-    return render_template("results.html", topic=topic, choices=choices)
+    total = 0
+    for c in choices:
+        total += c[1]
+    return render_template("results.html", topic=topic, choices=choices, total=total)
 
 @app.route("/polls/new")
 def newPollForm():
@@ -113,8 +115,19 @@ def createPoll():
 def login():
     username = request.form["username"]
     password = request.form["password"]
-    session["username"] = username
-    return redirect("/")
+    sql = "SELECT password FROM users WHERE username=:username"
+    result = db.session.execute(sql,{"username":username})
+    user = result.fetchone()
+    if user == None:
+        return render_template("home.html", notification="User not found.")
+    else:
+        hash_value = user[0]
+        if check_password_hash(hash_value,password):
+            session["username"] = username
+            return redirect("/")
+        else:
+            return render_template("home.html", notification="Wrong password.")
+
 
 @app.route("/logout")
 def logout():
@@ -128,6 +141,11 @@ def newUser():
 @app.route("/users/create", methods=["POST"])
 def createUser():
     username = request.form["username"]
+    sql = "SELECT id FROM users WHERE username=:username"
+    result = db.session.execute(sql, {"username":username})
+    numOfUnames = result.fetchone()
+    if numOfUnames > 0:
+        return render_template("new_user.html", username=username, notification="Username already taken.")
     password = request.form["password"]
     passwordAgain = request.form["password_again"]
     if password == passwordAgain:
@@ -136,4 +154,8 @@ def createUser():
         db.session.execute(sql, {"username":username,"password":hash_value})
         db.session.commit()
         return redirect("/")
-    return redirect("/users/new")
+    return render_template("new_user.html", username=username, notification="Passwords don't match.")
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template("404.html"), 404

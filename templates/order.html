@@ -1,3 +1,10 @@
+{% extends 'layout.html' %}
+
+{% block header %}
+Order pizza
+{% endblock %}
+
+{% block content %}
 <form action="/result" method="POST">
 Valitse pizza:
 <p>
@@ -16,3 +23,4 @@ Erikoistoiveet: <br>
 <p>
 <input type="submit" value="Lähetä">
 </form>
+{% endblock %} 
