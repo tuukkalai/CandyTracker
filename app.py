@@ -15,6 +15,61 @@ db = SQLAlchemy(app)
 def home():
     return render_template("home.html")
 
+@app.route("/login", methods=["POST"])
+def login():
+    username = request.form["username"]
+    password = request.form["password"]
+    sql = "SELECT password FROM users WHERE username=:username"
+    result = db.session.execute(sql,{"username":username})
+    user = result.fetchone()
+    if user == None:
+        return render_template("home.html", notification="User not found.")
+    else:
+        hash_value = user[0]
+        if check_password_hash(hash_value,password):
+            session["username"] = username
+            return redirect("/")
+        else:
+            return render_template("home.html", notification="Wrong password.")
+
+
+@app.route("/logout")
+def logout():
+    del session["username"]
+    return redirect("/")
+
+@app.route("/users/new")
+def newUser():
+    return render_template("new_user.html")
+
+@app.route("/users/create", methods=["POST"])
+def createUser():
+    username = request.form["username"]
+    sql = "SELECT id FROM users WHERE username=:username"
+    result = db.session.execute(sql, {"username":username})
+    numOfUnames = result.fetchone()
+    if numOfUnames > 0:
+        return render_template("new_user.html", username=username, notification="Username already taken.")
+    password = request.form["password"]
+    passwordAgain = request.form["password_again"]
+    if password == passwordAgain:
+        hash_value = generate_password_hash(password)
+        sql = "INSERT INTO users (username,password) VALUES (:username,:password)"
+        db.session.execute(sql, {"username":username,"password":hash_value})
+        db.session.commit()
+        return redirect("/")
+    return render_template("new_user.html", username=username, notification="Passwords don't match.")
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template("404.html"), 404
+
+
+"""
+Training material
+---
+"""
+# Pizza
 @app.route("/order")
 def form():
     return render_template("order.html")
@@ -29,6 +84,7 @@ def result():
         extras=extras, 
         message=msg)
 
+# Messages
 @app.route("/messages")
 def messages():
     result = db.session.execute("SELECT COUNT(*) FROM messages")
@@ -49,7 +105,7 @@ def send():
     db.session.commit()
     return redirect("/messages")
 
-# POLL SECTION
+# Polls
 @app.route("/polls")
 def poll():
     sql = "SELECT id, topic FROM polls"
@@ -111,51 +167,7 @@ def createPoll():
     db.session.commit()
     return redirect("/polls")
 
-@app.route("/login", methods=["POST"])
-def login():
-    username = request.form["username"]
-    password = request.form["password"]
-    sql = "SELECT password FROM users WHERE username=:username"
-    result = db.session.execute(sql,{"username":username})
-    user = result.fetchone()
-    if user == None:
-        return render_template("home.html", notification="User not found.")
-    else:
-        hash_value = user[0]
-        if check_password_hash(hash_value,password):
-            session["username"] = username
-            return redirect("/")
-        else:
-            return render_template("home.html", notification="Wrong password.")
-
-
-@app.route("/logout")
-def logout():
-    del session["username"]
-    return redirect("/")
-
-@app.route("/users/new")
-def newUser():
-    return render_template("new_user.html")
-
-@app.route("/users/create", methods=["POST"])
-def createUser():
-    username = request.form["username"]
-    sql = "SELECT id FROM users WHERE username=:username"
-    result = db.session.execute(sql, {"username":username})
-    numOfUnames = result.fetchone()
-    if numOfUnames > 0:
-        return render_template("new_user.html", username=username, notification="Username already taken.")
-    password = request.form["password"]
-    passwordAgain = request.form["password_again"]
-    if password == passwordAgain:
-        hash_value = generate_password_hash(password)
-        sql = "INSERT INTO users (username,password) VALUES (:username,:password)"
-        db.session.execute(sql, {"username":username,"password":hash_value})
-        db.session.commit()
-        return redirect("/")
-    return render_template("new_user.html", username=username, notification="Passwords don't match.")
-
-@app.errorhandler(404)
-def page_not_found(error):
-    return render_template("404.html"), 404
+"""
+Training ends
+---
+"""

@@ -5,9 +5,27 @@
 
 CandyTracker on makeisten syönnin seurantaan soveltuva päiväkirja. Sovellus saattaa toimia apuna hillitsemään omaa sokerinkulutusta, tai vaan esittämään kulutetun sokerin määrän.
 
-Päiväkirjanomaisesti käyttäjä voi lisätä päivän/viikon aikana syömänsä makeiset, ja sovellus näyttää käyttäjälle dataa. Halutessaan käyttäjä voi näyttää julkisesti kulutetun sokerin määrän tai pitää oman profiilinsa privaattina. Julkiset profiilit voidaan lisätä ranking-tilastoihin ("Eniten vähentäneet", "Vähiten karkkipäiviä", ...).
+### Käyttäjän toiminnot *- PLAN*
 
-Käyttäjän on mahdollista lisätä sovellukseen makeisia, jonka jälkeen myös muiden käyttäjien on mahdollista valita kyseinen tuote.
+- [ ] Vierailija voi rekisteröityä
+- [ ] Käyttäjä voi kirjautua sisään ja ulos
+- [ ] Käyttäjä voi hakea makeisia valmistajan nimellä tai makeisen nimellä
+- [ ] Käyttäjä voi lisätä puuttuvan makeisen listaan
+  - Tulisiko olla Premium-käyttäjä, jottei ihan jokainen trolli pääse täyttämään tietokantaa?
+  - Joku muu tarkistusrajoitus? Admin?
+- [ ] Käyttäjä voi lisätä omaan kulutushistoriaansa makeisen
+- [ ] Käyttäjä voi tarkastella omaa sokerin/makeisten kulutuksen
+
+### Jatkokehitys / Brainstorming
+> Hajatelmia mahdollisista laajennuksista
+
+- Sosiaalinen aspekti
+  - Käyttäjä voi julkaista oman kulutussyötteensä
+  - Käyttäjä voi kommentoida muiden käyttäjien syötettä / kirjauksia
+
+- Pelillistämis-osa
+  - Saavutuksia / merkkejä
+  - Käyttäjä voi kilpailla muiden käyttäjien kanssa
 
 ## Sovelluksen suorittaminen
 
@@ -15,8 +33,9 @@ Ensimmäisellä kerralla
 
 ```bash
 $ cd CandyTracker
+$ python3 -m venv venv
 $ source venv/bin/activate
-$ pip install flask
+$ pip install flask flask_sqlalchemy python-dotenv
 $ flask run
 ```
 
@@ -56,7 +75,7 @@ $ flask run
 
 ### Views
 - [x] Frontpage (with login)
-- [ ] Profile page
+- [ ] Profile page / Dashboard
 - [ ] Add entry to diary
 - [ ] Add candy
 - [x] 404
