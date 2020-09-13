@@ -13,6 +13,10 @@ def home():
 def page_not_found(error):
     return render_template("404.html"), 404
 
+@app.errorhandler(500)
+def page_not_found(error):
+    return render_template("404.html"), 500
+
 @app.route("/login", methods=["POST"])
 def login():
     username = request.form["username"]
@@ -37,12 +41,8 @@ def settings():
         password2 = request.form["newPass2"]
         oldPassword = request.form["prevPass"]
         tokenc = request.form["tokenc"]
-        print(session["username"] + " " + password + " " + tokenc)
         change = users.change_password(session["username"], password, password2, oldPassword, tokenc)
-        print(change)
-        if change[0]:
-            return render_template("settings.html", notification=change[1])
-        
+    return render_template("settings.html", notification=change[1])
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -119,12 +119,14 @@ def showPoll(id):
     sql = "SELECT topic, created_at FROM polls WHERE id=:id"
     result = db.session.execute(sql, {"id":id})
     res = result.fetchone()
-    topic = res[0]
-    created = res[1].strftime("%d.%m.%Y %H.%M")
-    sql = "SELECT id, choice FROM choices WHERE poll_id=:id"
-    result = db.session.execute(sql, {"id":id})
-    choices = result.fetchall()
-    return render_template("poll.html", topic=topic, choices=choices, created=created, id=id)
+    if res:
+        topic = res[0]
+        created = res[1].strftime("%d.%m.%Y %H.%M")
+        sql = "SELECT id, choice FROM choices WHERE poll_id=:id"
+        result = db.session.execute(sql, {"id":id})
+        choices = result.fetchall()
+        return render_template("poll.html", topic=topic, choices=choices, created=created, id=id)
+    return 
 
 @app.route("/polls/answer", methods=["POST"])
 def ans():
