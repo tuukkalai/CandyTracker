@@ -19,14 +19,17 @@ def page_not_found(error):
 def internal_error(error):
     return render_template("404.html"), 500
 
-@app.route("/login", methods=["POST"])
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    username = request.form["username"]
-    password = request.form["password"]
-    if users.login(username, password):
+    if request.method == "GET":
         return redirect("/")
-    else:
-        return render_template("home.html", notification="User not found or incorrect password")
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        if users.login(username, password):
+            return redirect("/")
+        else:
+            return render_template("home.html", notification="User not found or incorrect password")
 
 @app.route("/logout")
 def logout():

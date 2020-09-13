@@ -1,6 +1,15 @@
 # CandyTracker
 > HY Tsoha 2020 - tuukkala
 
+## Viikon 2 päivitykset
+
+Sovellus löytyy osoitteesta https://candytracker.herokuapp.com/
+
+Käyttäjänimellä `user` ja salasanalla `asdf1234` pääseekirjautumaan sisään.
+
+Reksiteröinnissä on vielä jokin bugi, samoin päiväkirjasyötteiden lisäämisessä.
+
+
 ## What?
 
 CandyTracker on makeisten syönnin seurantaan soveltuva päiväkirja. Sovellus saattaa toimia apuna hillitsemään omaa sokerinkulutusta, tai vaan esittämään kulutetun sokerin määrän.
