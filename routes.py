@@ -4,6 +4,8 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from db import db
 import users
+import entries
+import json
 
 @app.route("/")
 def home():
@@ -14,7 +16,7 @@ def page_not_found(error):
     return render_template("404.html"), 404
 
 @app.errorhandler(500)
-def page_not_found(error):
+def internal_error(error):
     return render_template("404.html"), 500
 
 @app.route("/login", methods=["POST"])
@@ -57,6 +59,21 @@ def register():
             return redirect("/")
         else:
             return render_template("new_user.html", username=username, notification=create[1])
+
+@app.route("/diary", methods=["GET", "POST"])
+def diary():
+    if request.method == "GET":
+        sql = "SELECT id, name, company FROM candies"
+        result = db.session.execute(sql)
+        candies = result.fetchall()
+        return render_template("diary.html", candies=candies)
+    if request.method == "POST":
+        candy = request.form["candy-search"]
+        date = request.form["candy-date"]
+        tokenc = request.form["tokenc"]
+        if entries.add_entry(candy, date, tokenc):
+            return redirect("/diary")
+
 
 """
 Training material

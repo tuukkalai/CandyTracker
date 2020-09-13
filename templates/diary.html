@@ -1,0 +1,85 @@
+{% extends 'layout.html' %}
+
+{% block header %}
+  Diary
+{% endblock %}
+
+{% block content %}
+
+<form action="/diary" method="POST">
+  <div class="form-group">
+    <label for="candy-search">Select candy</label>
+    <input id="candy-search" class="form-control" list="candy-search-list" name="candy-search" />
+    <datalist id="candy-search-list">
+    {% for item in candies %}
+      <option value="{{ item.name }}"></option>
+    {% endfor %}
+    </datalist>
+    <small id="candy-search-help" class="form-text text-muted">If candy not found, try adding it <a href="#">here</a></small>
+  </div>
+  <div class="form-group col-sm-3 px-sm-0">
+    <input type="date" class="form-control" name="candy-date" />
+  </div>
+  <input type="hidden" name="tokenc" value="{{ session.tokenc }}" />
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<canvas id="barChart" class="w-100" width="1100" height="400"></canvas>
+
+{% endblock %}
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+<script type="text/javascript">
+  $(document).ready(function(){
+    // Set current date to datepicker
+    let date = new Date()
+    $('[type=date]').val(date.getFullYear() + '-' + ('0' + (date.getMonth()+1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2))
+
+    // Chart
+    var ctx = $('#barChart')
+    var chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: [
+          'Sunday',
+          'Monday',
+          'Tuesday',
+          'Wednesday',
+          'Thursday',
+          'Friday',
+          'Saturday'
+        ],
+        datasets: [{
+          data: [
+            100,
+            0,
+            300,
+            420,
+            0,
+            0,
+            0
+          ],
+          lineTension: 0,
+          backgroundColor: 'transparent',
+          borderColor: '#228bff',
+          borderWidth: 4,
+          pointBackgroundColor: '#228bff'
+        }]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        },
+        legend: {
+          display: false
+        }
+      }
+    })
+  })
+</script>
+{% endblock %}
