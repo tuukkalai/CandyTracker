@@ -35,7 +35,7 @@ Ensimmäisellä kerralla
 $ cd CandyTracker
 $ python3 -m venv venv
 $ source venv/bin/activate
-$ pip install flask flask_sqlalchemy python-dotenv
+$ pip install -r requirements.txt
 $ flask run
 ```
 

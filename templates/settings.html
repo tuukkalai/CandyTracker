@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+{% block header %}
+  Settings
+{% endblock %}
+
+{% block content %}
+  <form action="/settings" method="POST">
+    <h2>Update password</h2>
+    <div class="form-group">
+      <label for="prevPass">Current password</label>
+      <input type="password" class="form-control" id="prevPass" name="prevPass">
+    </div>
+    <div class="form-group">
+      <label for="newPass1">New password</label>
+      <input type="password" class="form-control" id="newPass1" aria-describedby="newPassHelp" name="newPass1">
+      <small id="newPassHelp" class="form-text text-muted">Good password is long and it contains lowercase and uppercase characters, numbers and symbols.</small>
+    </div>
+    <div class="form-group">
+      <label for="newPass2">New password again</label>
+      <input type="password" class="form-control" id="newPass2" name="newPass2">
+    </div>
+    <input type="hidden" name="tokenc" value="{{ session.tokenc }}" />
+    <button type="submit" class="btn btn-primary mb-2">Change password</button>
+  </form>
+{% endblock %}
