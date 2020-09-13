@@ -6,6 +6,7 @@
 
 {% block content %}
 
+{% if session.user_id %}
 <form action="/diary" method="POST">
   <div class="form-group">
     <label for="candy-search">Select candy</label>
@@ -23,6 +24,7 @@
   <input type="hidden" name="tokenc" value="{{ session.tokenc }}" />
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+{% endif %}
 
 <canvas id="barChart" class="w-100" width="1100" height="400"></canvas>
 
