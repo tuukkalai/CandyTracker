@@ -41,7 +41,7 @@ def settings():
         password2 = request.form["newPass2"]
         oldPassword = request.form["prevPass"]
         tokenc = request.form["tokenc"]
-        change = users.change_password(session["username"], password, password2, oldPassword, tokenc)
+        change = users.change_password(password, password2, oldPassword, tokenc)
     return render_template("settings.html", notification=change[1])
 
 @app.route("/register", methods=["GET", "POST"])
@@ -50,21 +50,13 @@ def register():
         return render_template("new_user.html")
     if request.method == "POST":
         username = request.form["username"]
-        sql = "SELECT id FROM users WHERE username=:username"
-        result = db.session.execute(sql, {"username":username})
-        numOfUnames = result.fetchone()
-        if numOfUnames > 0:
-            return render_template("new_user.html", username=username, notification="Username already taken.")
         password = request.form["password"]
         passwordAgain = request.form["password_again"]
-        if password == passwordAgain:
-            hash_value = generate_password_hash(password)
-            sql = "INSERT INTO users (username,password) VALUES (:username,:password)"
-            db.session.execute(sql, {"username":username,"password":hash_value})
-            db.session.commit()
+        create = users.create_user(username, password, passwordAgain)
+        if create[0]:
             return redirect("/")
-        return render_template("new_user.html", username=username, notification="Passwords don't match.")
-
+        else:
+            return render_template("new_user.html", username=username, notification=create[1])
 
 """
 Training material
