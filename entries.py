@@ -1,4 +1,4 @@
-from flask import session
+from flask import session, abort
 from db import db
 import users
 
@@ -13,3 +13,10 @@ def add_entry(candy, date, tokenc):
         return True
     except:
         return False
+
+def get_sum_of_days():
+    user = users.user_id()
+    sql = "SELECT SUM(c.size) AS total, e.entry_time FROM entries e INNER JOIN candies c ON e.candy_id = c.id WHERE e.user_id = :user AND e.entry_time >= NOW()-INTERVAL '92 DAYS' GROUP BY e.entry_time"
+    result = db.session.execute(sql,{"user":user})
+    sums = result.fetchall()
+    return sums

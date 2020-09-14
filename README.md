@@ -5,9 +5,11 @@
 
 Sovellus löytyy osoitteesta https://candytracker.herokuapp.com/
 
-Käyttäjänimellä `user` ja salasanalla `asdf1234` pääseekirjautumaan sisään.
+Käyttäjänimellä `user` ja salasanalla `asdf1234` pääsee kirjautumaan sisään.
 
 Reksiteröinnissä on vielä jokin bugi, samoin päiväkirjasyötteiden lisäämisessä.
+
+Lokaalisti toimii rekisteröinti ja syötteiden lisääminen.
 
 
 ## What?

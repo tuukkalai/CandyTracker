@@ -1,5 +1,5 @@
 from app import app
-from flask import redirect, render_template, request, session
+from flask import redirect, render_template, request, session, abort, jsonify
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from db import db
@@ -13,7 +13,11 @@ def home():
 
 @app.errorhandler(404)
 def page_not_found(error):
-    return render_template("404.html"), 404
+    return render_template("404.html", error=error), 404
+
+@app.errorhandler(403)
+def user_not_authorized(error):
+    return render_template("404.html", error=error), 403
 
 @app.errorhandler(500)
 def internal_error(error):
@@ -65,11 +69,14 @@ def register():
 
 @app.route("/diary", methods=["GET", "POST"])
 def diary():
+    if not users.authenticated():
+        abort(403)
     if request.method == "GET":
         sql = "SELECT id, name, company FROM candies"
         result = db.session.execute(sql)
         candies = result.fetchall()
-        return render_template("diary.html", candies=candies)
+        rows = entries.get_sum_of_days()
+        return render_template("diary.html", candies=candies, entries=rows)
     if request.method == "POST":
         candy = request.form["candy-search"]
         date = request.form["candy-date"]
@@ -85,10 +92,14 @@ Training material
 # Pizza
 @app.route("/order")
 def form():
+    if not users.authenticated():
+        abort(403)
     return render_template("order.html")
 
 @app.route("/result", methods=["POST"])
 def result():
+    if not users.authenticated():
+        abort(403)
     pizza = request.form["pizza"]
     extras = request.form.getlist("extra")
     msg = request.form["message"]
@@ -100,6 +111,8 @@ def result():
 # Messages
 @app.route("/messages")
 def messages():
+    if not users.authenticated():
+        abort(403)
     result = db.session.execute("SELECT COUNT(*) FROM messages")
     count = result.fetchone()[0]
     result = db.session.execute("SELECT content FROM messages")
@@ -108,10 +121,14 @@ def messages():
 
 @app.route("/messages/new")
 def new():
+    if not users.authenticated():
+        abort(403)
     return render_template("new.html")
 
 @app.route("/messages/send", methods=["POST"])
 def send():
+    if not users.authenticated():
+        abort(403)
     content = request.form["content"]
     sql = "INSERT INTO messages (content) VALUES (:content)"
     db.session.execute(sql, {"content":content})
@@ -121,6 +138,8 @@ def send():
 # Polls
 @app.route("/polls")
 def poll():
+    if not users.authenticated():
+        abort(403)
     sql = "SELECT id, topic FROM polls"
     result = db.session.execute(sql)
     polls = result.fetchall()
@@ -128,6 +147,8 @@ def poll():
 
 @app.route("/polls/<int:id>")
 def showPoll(id):
+    if not users.authenticated():
+        abort(403)
     sql = "SELECT topic, created_at FROM polls WHERE id=:id"
     result = db.session.execute(sql, {"id":id})
     res = result.fetchone()
@@ -142,6 +163,8 @@ def showPoll(id):
 
 @app.route("/polls/answer", methods=["POST"])
 def ans():
+    if not users.authenticated():
+        abort(403)
     choice_id = request.form["choice"]
     poll_id = request.form["id"]
     sql = "INSERT INTO answers (choice_id, sent_at) VALUES (:choice_id, NOW())"
@@ -151,6 +174,8 @@ def ans():
 
 @app.route("/results/<int:id>")
 def showResults(id):
+    if not users.authenticated():
+        abort(403)
     sql = "SELECT topic FROM polls WHERE id=:id"
     result = db.session.execute(sql, {"id":id})
     topic = result.fetchone()[0]
@@ -164,10 +189,14 @@ def showResults(id):
 
 @app.route("/polls/new")
 def newPollForm():
+    if not users.authenticated():
+        abort(403)
     return render_template("new_poll.html")
 
 @app.route("/polls/create", methods=["POST"])
 def createPoll():
+    if not users.authenticated():
+        abort(403)
     topic = request.form["topic"]
     sql = "INSERT INTO polls (topic, created_at) VALUES (:topic, NOW()) RETURNING id"
     result = db.session.execute(sql, {"topic":topic})

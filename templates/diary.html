@@ -26,62 +26,17 @@
 </form>
 {% endif %}
 
-<canvas id="barChart" class="w-100" width="1100" height="400"></canvas>
+<canvas id="barChart" class="my-4 w-100 chartjs-render-monitor" width="1100" height="400"></canvas>
 
 {% endblock %}
 
 {% block script %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 <script type="text/javascript">
-  $(document).ready(function(){
-    // Set current date to datepicker
-    let date = new Date()
-    $('[type=date]').val(date.getFullYear() + '-' + ('0' + (date.getMonth()+1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2))
-
-    // Chart
-    var ctx = $('#barChart')
-    var chart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: [
-          'Sunday',
-          'Monday',
-          'Tuesday',
-          'Wednesday',
-          'Thursday',
-          'Friday',
-          'Saturday'
-        ],
-        datasets: [{
-          data: [
-            100,
-            0,
-            300,
-            420,
-            0,
-            0,
-            0
-          ],
-          lineTension: 0,
-          backgroundColor: 'transparent',
-          borderColor: '#228bff',
-          borderWidth: 4,
-          pointBackgroundColor: '#228bff'
-        }]
-      },
-      options: {
-        scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true
-            }
-          }]
-        },
-        legend: {
-          display: false
-        }
-      }
-    })
-  })
+  let entries = [{% for e in entries %}{
+        "date": "{{ e.entry_time }}",
+        "total": {{ e.total }}
+      },{% endfor %}]
 </script>
+<script src="{{ url_for('static', filename='chart.js') }}"></script>
 {% endblock %}

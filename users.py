@@ -5,6 +5,11 @@ from posix import abort
 
 from db import db
 
+def authenticated():
+    if user_id() > 0:
+        return True
+    return False
+
 def user_id():
     return session.get("user_id",0)
 
