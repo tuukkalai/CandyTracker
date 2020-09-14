@@ -40,3 +40,4 @@ CREATE TABLE messages (
 );
 
 INSERT INTO users (username, password, auth) VALUES ('tuukkala','pbkdf2:sha256:150000$yRBgegD3$3fe8c0556671f2be8980adb133a7164db21531f7f8c4011bb55f3db4f77714ee','admin');
+INSERT INTO candies (name, size, sugar, gtin, company, category) VALUES ('Karl Fazer Maitosuklaa', 200, 96, 6411401015090, 'Fazer', 'Chocolate'), ('Remix Mad', 350, 210, 6416453034945, 'Fazer', 'Candy bag');

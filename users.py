@@ -13,14 +13,6 @@ def authenticated():
 def user_id():
     return session.get("user_id",0)
 
-def user_name():
-    id = user_id()
-    if id > 0:
-        sql = "SELECT username FROM users WHERE id=:id"
-        result = db.session.execute(sql,{"id":id})
-        return result[0]
-    return False
-
 def login(username, password):
     sql = "SELECT password, id FROM users WHERE username=:username"
     result = db.session.execute(sql,{"username":username})
@@ -46,13 +38,13 @@ def change_password(password, password2, oldPassword, tokenc):
     if tokenc != session["tokenc"]:
         abort(403)
     if password == password2:
-        username = user_name()
-        sql = "SELECT password FROM users WHERE username=:username"
-        result = db.session.execute(sql,{"username":username})
+        userid = user_id()
+        sql = "SELECT password FROM users WHERE id=:userid"
+        result = db.session.execute(sql,{"userid":userid})
         user = result.fetchone()
         if check_password_hash(user[0], oldPassword):
-            sql = "UPDATE users SET password=:password WHERE username=:username"
-            db.session.execute(sql,{"password":generate_password_hash(password),"username":username})
+            sql = "UPDATE users SET password=:password WHERE id=:userid"
+            db.session.execute(sql,{"password":generate_password_hash(password),"userid":userid})
             db.session.commit()
             return [True, "Password updated"]
         else:
