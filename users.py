@@ -55,8 +55,8 @@ def change_password(password, password2, oldPassword, tokenc):
 def create_user(username, password, passwordAgain):
     sql = "SELECT id FROM users WHERE username=:username"
     result = db.session.execute(sql, {"username":username})
-    numOfUnames = result.fetchone()
-    if numOfUnames > 0:
+    unamesInDb = result.fetchone()
+    if unamesInDb != None:
         return [False, "Username already taken."]
     if password == passwordAgain:
         hash_value = generate_password_hash(password)
