@@ -57,11 +57,11 @@ def create_user(username, password, passwordAgain):
     result = db.session.execute(sql, {"username":username})
     unamesInDb = result.fetchone()
     if unamesInDb != None:
-        return [False, "Username already taken."]
+        return False
     if password == passwordAgain:
         hash_value = generate_password_hash(password)
         sql = "INSERT INTO users (username,password) VALUES (:username,:password)"
         db.session.execute(sql, {"username":username,"password":hash_value})
         db.session.commit()
         return login(username, password)
-    return [False, "Passwords don't match."]
+    return False
