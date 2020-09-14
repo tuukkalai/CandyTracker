@@ -61,11 +61,10 @@ def register():
         username = request.form["username"]
         password = request.form["password"]
         passwordAgain = request.form["password_again"]
-        create = users.create_user(username, password, passwordAgain)
-        if create[0]:
+        if users.create_user(username, password, passwordAgain):
             return redirect("/")
         else:
-            return render_template("new_user.html", username=username, notification=create[1])
+            return render_template("new_user.html", username=username, notification="Username already taken, or password mismatch")
 
 @app.route("/diary", methods=["GET", "POST"])
 def diary():
