@@ -23,7 +23,7 @@ def login(username, password):
         if check_password_hash(user[0],password):
             session["user_id"] = user[1]
             session["username"] = username
-            session["tokenc"] = os.urandom(16).encode('hex') # os.urandom(16).hex()
+            session["tokenc"] = os.urandom(16).hex() # os.urandom(16).encode('hex')
             return True
         else:
             return False
