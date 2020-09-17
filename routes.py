@@ -81,7 +81,6 @@ def diary():
         candy = request.form["select-candy"]
         date = request.form["candy-date"]
         tokenc = request.form["tokenc"]
-        # New candy information
         new_name = request.form["add-candy-name"]
         new_company = request.form["add-candy-company"]
         new_weight = request.form["add-candy-weight"]
@@ -90,7 +89,6 @@ def diary():
         new_category = request.form["add-candy-category"]
         if new_name != '':
             candy = candies.add_candy(new_name, new_company, new_weight, new_sugar, new_gtin, new_category)
-            print('candy id ' + candy)
         if entries.add_entry(candy, date, tokenc):
             return redirect("/diary")
 
