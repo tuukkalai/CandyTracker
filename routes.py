@@ -5,6 +5,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from db import db
 import users
 import entries
+import candies
 import json
 
 @app.route("/")
@@ -73,16 +74,25 @@ def diary():
     if request.method == "GET":
         sql = "SELECT id, name, company FROM candies"
         result = db.session.execute(sql)
-        candies = result.fetchall()
+        all_candies = result.fetchall()
         rows = entries.get_sum_of_days()
-        return render_template("diary.html", candies=candies, entries=rows)
+        return render_template("diary.html", candies=all_candies, entries=rows)
     if request.method == "POST":
-        candy = request.form["candy-search"]
+        candy = request.form["select-candy"]
         date = request.form["candy-date"]
         tokenc = request.form["tokenc"]
+        # New candy information
+        new_name = request.form["add-candy-name"]
+        new_company = request.form["add-candy-company"]
+        new_weight = request.form["add-candy-weight"]
+        new_sugar = request.form["add-candy-sugar"]
+        new_gtin = request.form["add-candy-gtin"]
+        new_category = request.form["add-candy-category"]
+        if new_name != '':
+            candy = candies.add_candy(new_name, new_company, new_weight, new_sugar, new_gtin, new_category)
+            print('candy id ' + candy)
         if entries.add_entry(candy, date, tokenc):
             return redirect("/diary")
-
 
 """
 Training material

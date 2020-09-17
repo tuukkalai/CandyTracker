@@ -7,7 +7,7 @@ def add_entry(candy, date, tokenc):
         abort(403)
     try:
         user = users.user_id()
-        sql = "INSERT INTO entries (user_id, candy_id, entry_time) VALUES (:user, (SELECT id FROM candies WHERE name=:candy), :date)"
+        sql = "INSERT INTO entries (user_id, candy_id, entry_time) VALUES (:user, :candy, :date)"
         db.session.execute(sql,{"user":user,"candy":candy,"date":date})
         db.session.commit()
         return True

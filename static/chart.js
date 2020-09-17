@@ -24,6 +24,9 @@ const COLORS = {
 }
 
 $(document).ready(function(){
+  // Set the Select tag
+  $('#select-candy').select2();
+  
   // Set current date to datepicker
   let date = new Date()
   $('[type=date]').val(date.getFullYear() + '-' + ('0' + (date.getMonth()+1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2))

@@ -6,6 +6,14 @@ body {
 }
 */
 
+*:focus, .form-control:focus, .btn-primary.focus, .btn-primary:focus {
+  color: #495057;
+  outline: 0;
+  background-color: #fff;
+  border-color: #1eb3e0;
+  box-shadow: 0 0 0 0.3rem rgba(20,183,255,.5);
+}
+
 .alert {
   position: absolute;
   top: 70px;
@@ -16,4 +24,38 @@ body {
 .nav-item:hover {
   color: #333;
   text-decoration: underline;
+}
+
+.select2-container {
+  width: 100% !important;
+}
+
+.select2-container .select2-selection--single {
+  height: inherit;
+}
+
+.select2-container--default .select2-selection--single {
+  padding: .375rem .75rem;
+}
+
+.select2-container .select2-selection--single .select2-selection__rendered {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+  top: 8px;
+  right: 8px;
+}
+
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+  color: #495057;
+  background-color: #fff;
+  border-color: #80bdff;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+[type=search] {
+  outline-offset: initial;
 }
