@@ -2,6 +2,7 @@
 
 {% block style %}
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@duetds/date-picker@1.0.1/dist/duet/themes/default.css" />
 {% endblock %}
 
 {% block header %}
@@ -21,7 +22,7 @@
     </select>
     <small id="candy-search-help" class="form-text text-muted">If candy not found, try adding it <a href="#" data-toggle="collapse" data-target="#add-candy" aria-expanded="false" aria-controls="add-candy">here</a></small>
   </div>
-  <div class="collapse" id="add-candy">
+  <div class="form-group collapse" id="add-candy">
     <div class="card card-body">
       <div class="form-group">
         <label for="add-candy-name">Name</label>
@@ -53,7 +54,8 @@
     </div>
   </div>
   <div class="form-group col-sm-3 px-sm-0">
-    <input type="date" class="form-control" name="candy-date" />
+    <!--<label for="date">Choose a date</label>-->
+    <duet-date-picker name="candy-date" identifier="date" value="2020-09-22"></duet-date-picker>
   </div>
   <input type="hidden" name="tokenc" value="{{ session.tokenc }}" />
   <button type="submit" class="btn btn-primary">Submit</button>
@@ -65,6 +67,8 @@
 {% endblock %}
 
 {% block script %}
+<script type="module" src="https://cdn.jsdelivr.net/npm/@duetds/date-picker@1.0.1/dist/duet/duet.esm.js"></script>
+<script nomodule src="https://cdn.jsdelivr.net/npm/@duetds/date-picker@1.0.1/dist/duet/duet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 <script type="text/javascript">

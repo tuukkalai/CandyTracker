@@ -23,14 +23,47 @@ const COLORS = {
   'green': '#72b01d'
 }
 
+
+let date = new Date()
+//document.querySelector('duet-date-picker').value = ('0' + date.getDate()).slice(-2) + '-' + ('0' + (date.getMonth()+1)).slice(-2) + '-' + date.getFullYear()
+document.querySelector('duet-date-picker').value = date.getFullYear() + '-' + ('0' + (date.getMonth()+1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2)
+
 $(document).ready(function(){
   // Set the Select tag
   $('#select-candy').select2();
   
-  // Set current date to datepicker
-  let date = new Date()
-  $('[type=date]').val(date.getFullYear() + '-' + ('0' + (date.getMonth()+1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2))
-  
+  // Date Picker Localization
+  const picker = document.querySelector('duet-date-picker')
+  const DATE_FORMAT = /^(\d{1,2})\-(\d{1,2})\-(\d{4})$/
+
+  picker.dateAdapter = {
+    parse(value = "", createDate) {
+      const matches = value.match(DATE_FORMAT)
+      if (matches) {
+        return createDate(matches[3], matches[2], matches[1])
+      }
+    },
+    format(date) {
+      return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
+    },
+  }
+
+  picker.localization = {
+    buttonLabel: "Select date",
+    placeholder: "dd.mm.yyyy",
+    selectedDateMessage: "Selected date is",
+    prevMonthLabel: "Previous month",
+    nextMonthLabel: "Next month",
+    monthSelectLabel: "Month",
+    yearSelectLabel: "Year",
+    closeLabel: "Close window",
+    keyboardInstruction: "Navigation available with arrow keys",
+    calendarHeading: "Select date",
+    dayNames: WEEKDAYS,
+    monthNames: MONTHS,
+    monthNamesShort: MONTHS.map(m => m.substring(0,3)),
+  }
+
   // Label-maker
   let graphLabels = []
   let candyData = []

@@ -1,7 +1,5 @@
 # CandyTracker
-> HY Tsoha 2020 - tuukkala
-
-## Viikon 2 päivitykset
+> Sovellus on luotu osana Helsingin yliopiston tietojenkäsittelutieteen kurssia "Aineopintojen harjoitustyö: Tietokantasovellus"
 
 Sovellus löytyy osoitteesta https://candytracker.herokuapp.com/
 
@@ -9,36 +7,40 @@ Käyttäjänimellä `user` ja salasanalla `asdf1234` pääsee kirjautumaan sisä
 
 Uuden käyttäjän voi luoda valitsemalla 'Sign up'.
 
-~~Reksiteröinnissä on vielä jokin bugi, samoin päiväkirjasyötteiden lisäämisessä.~~
-
-~~Lokaalisti toimii rekisteröinti ja syötteiden lisääminen.~~
-
-
 ## What?
 
-CandyTracker on makeisten syönnin seurantaan soveltuva päiväkirja. Sovellus saattaa toimia apuna hillitsemään omaa sokerinkulutusta, tai vaan esittämään kulutetun sokerin määrän.
+CandyTracker on makeisten syönnin seurantaan soveltuva päiväkirja. Sovellus saattaa toimia apuna hillitsemään omaa sokerinkulutusta, tai esittämään kulutetun sokerin määrän.
 
-### Käyttäjän toiminnot *- PLAN*
+CandyTrackerissä voit muodostaa kavereiden, tai vaikka tuntemattomien kanssa ryhmiä, ja kilpailla haasteissa muita ryhmiä vastaan.
 
-- [ ] Vierailija voi rekisteröityä
-- [ ] Käyttäjä voi kirjautua sisään ja ulos
-- [ ] Käyttäjä voi hakea makeisia valmistajan nimellä tai makeisen nimellä
-- [ ] Käyttäjä voi lisätä puuttuvan makeisen listaan
-  - Tulisiko olla Premium-käyttäjä, jottei ihan jokainen trolli pääse täyttämään tietokantaa?
-  - Joku muu tarkistusrajoitus? Admin?
-- [ ] Käyttäjä voi lisätä omaan kulutushistoriaansa makeisen
-- [ ] Käyttäjä voi tarkastella omaa sokerin/makeisten kulutuksen
+### Teknologiat
 
-### Jatkokehitys / Brainstorming
-> Hajatelmia mahdollisista laajennuksista
+- [Python](https://www.python.org/)
+- [Flask](https://flask.palletsprojects.com/en/1.1.x/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [Bootstrap](https://getbootstrap.com/)
+  - jonka osana mm. [jQuery](https://jquery.com/)
+- [Chart.js](https://www.chartjs.org/)
+- [https://select2.org/](Select2)
+- [Duet Date Picker](https://github.com/duetds/date-picker)
+- [Teenyicons](https://teenyicons.com/)
 
-- Sosiaalinen aspekti
-  - Käyttäjä voi julkaista oman kulutussyötteensä
-  - Käyttäjä voi kommentoida muiden käyttäjien syötettä / kirjauksia
+### Käyttäjän toiminnot
 
-- Pelillistämis-osa
-  - Saavutuksia / merkkejä
-  - Käyttäjä voi kilpailla muiden käyttäjien kanssa
+#### Perustoiminnot
+- [x] Vierailija voi rekisteröityä
+- [x] Käyttäjä voi kirjautua sisään ja ulos
+- [x] Käyttäjä voi hakea makeisia valmistajan nimellä tai makeisen nimellä
+- [x] Käyttäjä voi lisätä puuttuvan makeisen listaan
+- [x] Käyttäjä voi lisätä omaan kulutushistoriaansa makeisen
+- [ ] Käyttäjä voi tarkastella omaa sokerin/makeisten kulutuksta
+
+#### Ryhmätoiminnot
+- [ ] Käyttäjä voi luoda ryhmän
+- [ ] Käyttäjä voi etsiä ryhmiä
+- [ ] Käyttäjä voi liittyä ryhmään
+- [ ] Käyttäjä voi poistua ryhmästä
+- [ ] Käyttäjä voi luoda haasteen/tavoitteen ryhmässä
 
 ## Sovelluksen suorittaminen
 
@@ -48,13 +50,15 @@ Ensimmäisellä kerralla
 $ cd CandyTracker
 $ python3 -m venv venv
 $ source venv/bin/activate
-$ pip install -r requirements.txt
-$ flask run
+(venv) $ pip install -r requirements.txt
+(venv) $ flask run
 ```
 
 Seuraavilla kerroilla
+
 ```bash
-$ flask run
+$ source venv/bin/activate
+(venv) $ flask run
 ```
 
 ## Kurssiin liittyvät vaatimukset
@@ -83,13 +87,3 @@ $ flask run
 - [ ] Sovelluksessa ei ole SQL-injektion mahdollisuutta eikä XSS- ja CSRF-haavoittuvuuksia
 - [ ] Salasanat tallennetaan tietokantaan asianmukaisesti
 - [ ] Versionhallinnassa ei ole salaista tietoa (kuten .env-tiedostoa)
-
-## ToDo
-
-### Views
-- [x] Frontpage (with login)
-- [ ] Profile page / Dashboard
-- [ ] Add entry to diary
-- [ ] Add candy
-- [x] 404
-- [ ] Feed (?)
