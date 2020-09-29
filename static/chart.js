@@ -23,11 +23,6 @@ const COLORS = {
   'green': '#72b01d'
 }
 
-
-let date = new Date()
-//document.querySelector('duet-date-picker').value = ('0' + date.getDate()).slice(-2) + '-' + ('0' + (date.getMonth()+1)).slice(-2) + '-' + date.getFullYear()
-document.querySelector('duet-date-picker').value = date.getFullYear() + '-' + ('0' + (date.getMonth()+1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2)
-
 $(document).ready(function(){
   // Set the Select tag
   $('#select-candy').select2();
@@ -35,6 +30,12 @@ $(document).ready(function(){
   // Date Picker Localization
   const picker = document.querySelector('duet-date-picker')
   const DATE_FORMAT = /^(\d{1,2})\-(\d{1,2})\-(\d{4})$/
+  let date = new Date()
+
+  // Set current date as default and max
+  const currentISODate = date.getFullYear() + '-' + ('0' + (date.getMonth()+1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2)
+  picker.value = currentISODate
+  picker.max = currentISODate
 
   picker.dateAdapter = {
     parse(value = "", createDate) {
@@ -50,7 +51,7 @@ $(document).ready(function(){
 
   picker.localization = {
     buttonLabel: "Select date",
-    placeholder: "dd.mm.yyyy",
+    placeholder: "dd-mm-yyyy",
     selectedDateMessage: "Selected date is",
     prevMonthLabel: "Previous month",
     nextMonthLabel: "Next month",
@@ -64,88 +65,121 @@ $(document).ready(function(){
     monthNamesShort: MONTHS.map(m => m.substring(0,3)),
   }
 
-  // Label-maker
-  let graphLabels = []
-  let candyData = []
-  let averageData = []
-  let days = 10 // max 92
-  let k = days
-  let d = new Date()
-  let total = 0
-  
-  for(let i = 0; i < entries.length ; i++){
-    let edate = new Date(entries[i].date)
-    let difference = Math.floor((date-edate)/(1000*60*60*24))
-    if(difference <= days){
-      total += entries[i].total
-      candyData[days-difference] = entries[i].total
-    }
-  }
-
-  for(let j = 0; j <= days; j++){
-    if(candyData[j] === undefined){
-      candyData[j] = 0
-    }
-    //graphLabels[j] = WEEKDAYS[(8+(-k%7))%7]
-    graphLabels[k] = '' + d.getDate() + '.' + (d.getMonth()+1) + '.' + d.getFullYear()
-    d.setDate(d.getDate() - 1)
-    averageData[j] = total/days
-    k--
-  }
-
-  // Chart  
-  var ctx = $('#barChart')
-  var chart = new Chart(ctx, {
-    data: {
-      labels: graphLabels,
-      datasets: [{
-        type: 'line',
-        label: 'Average',
-        backgroundColor: COLORS.blue,
-        borderColor: COLORS.blue,
-        borderDash: [5,5],
-        pointRadius: 0,
-        fill: false,
-        data: averageData
-      },{
-        type: 'bar',
-        label: 'Candies',
-        backgroundColor: COLORS.red,
-        data: candyData
+  // Chart options
+  let chartOptions = {
+    title: {
+      display: false,
+      text: 'Candy consumption'
+    },
+    tooltips: {
+      mode: 'index',
+      intersect: false
+    },
+    responsive: true,
+    scales: {
+      xAxes: [{
+        offset: true,
+        stacked: true,
+        gridLines: {
+            offsetGridLines : true
+        }
+      }],
+      yAxes: [{
+        stacked: true,
+        scaleLabel: {
+          display: true,
+          labelString: 'Candies in grams'
+        },
+        ticks: {
+          stepSize: 200
+        }
       }]
     },
-    options: {
-      title: {
-        display: false,
-        text: 'Candy consumption - last week'
-      },
-      tooltips: {
-        mode: 'index',
-        intersect: false
-      },
-      responsive: true,
-      scales: {
-        xAxes: [{
-          offset: true,
-          stacked: true,
-          gridLines: {
-              offsetGridLines : true
-          }
-        }],
-        yAxes: [{
-          stacked: true,
-          scaleLabel: {
-            display: true,
-            labelString: 'Candies in grams'
-          },
-          ticks: {
-            stepSize: 200
-          }
+    legend: {
+      position: 'bottom'
+    }
+  }
+
+  // Init candyChart to scope outside reloadChart()
+  var candyChart = {}
+
+  function reloadChart(range, chart) {
+    // If reloadChart is called with previous chart, destroy previous chart
+    if(typeof chart !== 'undefined'){
+      chart.destroy()
+    }
+
+    // Label-maker
+    let graphLabels = []
+    let candyData = []
+    let averageData = []
+    let days = range
+    let k = days-1
+    let d = new Date()
+    let total = 0
+    
+    for(let i = 0; i < entries.length ; i++){
+      let edate = new Date(entries[i].date)
+      let difference = Math.floor((date-edate)/(1000*60*60*24))
+      if(difference <= days){
+        total += entries[i].total
+        candyData[days-difference] = entries[i].total
+      }
+    }
+
+    for(let j = 0; j <= days-1; j++){
+      if(candyData[j] === undefined){
+        candyData[j] = 0
+      }
+      //graphLabels[j] = WEEKDAYS[(8+(-k%7))%7]
+      graphLabels[k] = '' + d.getDate() + '.' + (d.getMonth()+1) + '.'
+      d.setDate(d.getDate() - 1)
+      averageData[j] = Math.floor((total/days) * 100) / 100
+      k--
+    }
+
+    candyChart = new Chart($('#barChart'), {
+      data: {
+        labels: graphLabels,
+        datasets: [{
+          type: 'line',
+          label: 'Average',
+          backgroundColor: COLORS.blue,
+          borderColor: COLORS.blue,
+          borderDash: [5,5],
+          pointRadius: 0,
+          fill: false,
+          data: averageData
+        },{
+          type: 'bar',
+          label: 'Candies',
+          backgroundColor: COLORS.red,
+          data: candyData
         }]
       },
-      legend: {
-        position: 'bottom'
-      }
+      options: chartOptions
+    })
+  }
+
+  // Call reloadChart with default value
+  reloadChart(7)
+
+  $('[id^=range-]').click(function(){
+    $('[id^=range-]').removeClass('active')
+    $(this).addClass('active')
+    switch($(this).attr('id')){
+      case 'range-7':
+        reloadChart(7, candyChart)
+        break
+      case 'range-14':
+        reloadChart(14, candyChart)
+        break
+      case 'range-31':
+        reloadChart(31, candyChart)
+        break
+      case 'range-92':
+        reloadChart(92, candyChart)
+        break
     }
   })
 })

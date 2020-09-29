@@ -5,11 +5,12 @@ Message
 {% endblock %}
 
 {% block content %}
-Viestien määrä: {{ count }}
-<hr>
-{% for message in messages %}
-{{ message[0] }}
-<hr>
-{% endfor %}
-<a href="/messages/new">Lähetä viesti</a>
+<div class="col-lg-8">
+  <!-- <small>Amount of messages: {{ count }}</small> -->
+  {% for message in messages %}
+  {{ message[0] }}
+  <hr>
+  {% endfor %}
+  <a href="/messages/new">Lähetä viesti</a>
+</div>
 {% endblock %}

@@ -123,7 +123,7 @@ def messages():
         abort(403)
     result = db.session.execute("SELECT COUNT(*) FROM messages")
     count = result.fetchone()[0]
-    result = db.session.execute("SELECT content FROM messages")
+    result = db.session.execute("SELECT m.content, u.username FROM messages INNER JOIN users ON m.user_id = u.id")
     messages = result.fetchall()
     return render_template("messages.html", count=count, messages=messages)
 
@@ -138,8 +138,9 @@ def send():
     if not users.authenticated():
         abort(403)
     content = request.form["content"]
-    sql = "INSERT INTO messages (content) VALUES (:content)"
-    db.session.execute(sql, {"content":content})
+    user = users.user_id()
+    sql = "INSERT INTO messages (content, user_id) VALUES (:content, :user)"
+    db.session.execute(sql, {"content":content,"user":user})
     db.session.commit()
     return redirect("/messages")
 

@@ -10,60 +10,75 @@
 {% endblock %}
 
 {% block content %}
-
+<div class="col-lg-4 order-last">
 {% if session.user_id %}
-<form action="/diary" method="POST">
-  <div class="form-group">
-    <label for="select-candy">Select candy</label>
-    <select id="select-candy" class="form-control" name="select-candy">
-    {% for item in candies %}
-      <option value="{{ item.id }}">{{ item.name }}</option>
-    {% endfor %}
-    </select>
-    <small id="candy-search-help" class="form-text text-muted">If candy not found, try adding it <a href="#" data-toggle="collapse" data-target="#add-candy" aria-expanded="false" aria-controls="add-candy">here</a></small>
-  </div>
-  <div class="form-group collapse" id="add-candy">
-    <div class="card card-body">
-      <div class="form-group">
-        <label for="add-candy-name">Name</label>
-        <input class="form-control" type="text" name="add-candy-name" />
-      </div>
-      <div class="form-group">
-        <label for="add-candy-company">Manufacturer</label>
-        <input class="form-control" type="text" name="add-candy-company" />
-      </div>
-      <div class="form-group">
-        <label for="add-candy-weight">Weight (g)</label>
-        <input class="form-control" type="text" name="add-candy-weight" />
-        <small id="add-candy-weight-help" class="form-text text-muted">Add weight of single bag, box or bar in grams.</small>
-      </div>
-      <div class="form-group">
-        <label for="add-candy-sugar">Sugar (g)</label>
-        <input class="form-control" type="text" name="add-candy-sugar" />
-        <small id="add-candy-sugar-help" class="form-text text-muted">Add weight of sugar in single bag, box or bar in grams.</small>
-      </div>
-      <div class="form-group">
-        <label for="add-candy-gtin">Global Trade Item Number (GTIN)</label>
-        <input class="form-control" type="text" name="add-candy-gtin" />
-        <small id="add-candy-gtin-help" class="form-text text-muted">To help identifying sweets and candies add GTIN, approx. 13 digit number under/above the barcode.</small>
-      </div>
-      <div class="form-group">
-        <label for="add-candy-category">Category</label>
-        <input class="form-control"type="text" name="add-candy-category" />
+<div class="card card-body">
+  <h5 class="card-title">Add new entry</h5>
+  <form action="/diary" method="POST">
+    <div class="form-group">
+      <label for="select-candy">Select candy</label>
+      <select id="select-candy" class="form-control" name="select-candy">
+      {% for item in candies %}
+        <option value="{{ item.id }}">{{ item.name }}</option>
+      {% endfor %}
+      </select>
+      <small id="candy-search-help" class="form-text text-muted">If candy not found, create entry with new by clicking <a href="#" data-toggle="collapse" data-target="#add-candy" aria-expanded="false" aria-controls="add-candy">here</a></small>
+    </div>
+    <div class="form-group collapse" id="add-candy">
+      <div class="card card-body">
+        <div class="form-group">
+          <label for="add-candy-name">Name</label>
+          <input class="form-control" type="text" name="add-candy-name" />
+        </div>
+        <div class="form-group">
+          <label for="add-candy-company">Manufacturer</label>
+          <input class="form-control" type="text" name="add-candy-company" />
+        </div>
+        <div class="form-group">
+          <label for="add-candy-weight">Weight (g)</label>
+          <input class="form-control" type="text" name="add-candy-weight" />
+          <small id="add-candy-weight-help" class="form-text text-muted">Add weight of single bag, box or bar in grams.</small>
+        </div>
+        <div class="form-group">
+          <label for="add-candy-sugar">Sugar (g)</label>
+          <input class="form-control" type="text" name="add-candy-sugar" />
+          <small id="add-candy-sugar-help" class="form-text text-muted">Add weight of sugar in single bag, box or bar in grams.</small>
+        </div>
+        <div class="form-group">
+          <label for="add-candy-gtin">Global Trade Item Number (GTIN)</label>
+          <input class="form-control" type="text" name="add-candy-gtin" />
+          <small id="add-candy-gtin-help" class="form-text text-muted">To help identifying sweets and candies add GTIN, approx. 13 digit number under/above the barcode.</small>
+        </div>
+        <div class="form-group">
+          <label for="add-candy-category">Category</label>
+          <input class="form-control"type="text" name="add-candy-category" />
+        </div>
       </div>
     </div>
-  </div>
-  <div class="form-group col-sm-3 px-sm-0">
-    <!--<label for="date">Choose a date</label>-->
-    <duet-date-picker name="candy-date" identifier="date" value="2020-09-22"></duet-date-picker>
-  </div>
-  <input type="hidden" name="tokenc" value="{{ session.tokenc }}" />
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+    <div class="form-group">
+      <label for="date">Choose a date</label>
+      <duet-date-picker name="candy-date" identifier="date" value="2020-09-22" max="2020-09-22"></duet-date-picker>
+      <small id="candy-date-help" class="form-text text-muted">dd-mm-yyyy</small>
+    </div>
+    <input type="hidden" name="tokenc" value="{{ session.tokenc }}" />
+    <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+  </form>
+</div>
 {% endif %}
-
-<canvas id="barChart" class="my-4 w-100 chartjs-render-monitor" width="1100" height="400"></canvas>
-
+</div>
+<div class="col-lg-8">
+  <div class="chart-container my-4">
+    <canvas id="barChart"></canvas>
+  </div>
+  <div class="form-group">
+    <div class="btn-group" role="group" aria-label="Date range">
+      <button type="button" class="btn btn-secondary active" id="range-7">Last 7 days</button>
+      <button type="button" class="btn btn-secondary" id="range-14">Last 14 days</button>
+      <button type="button" class="btn btn-secondary" id="range-31">Last month</button>
+      <button type="button" class="btn btn-secondary" id="range-92">Last 3 months</button>
+    </div>
+  </div>
+</div>
 {% endblock %}
 
 {% block script %}

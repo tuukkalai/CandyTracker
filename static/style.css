@@ -6,7 +6,7 @@ body {
 }
 */
 
-*:focus, .form-control:focus, .btn-primary.focus, .btn-primary:focus {
+*:focus, .form-control:focus, .btn-primary.focus, .btn-primary:focus, .duet-date__input:focus {
   color: #495057;
   outline: 0;
   background-color: #fff;
@@ -26,6 +26,7 @@ body {
   text-decoration: underline;
 }
 
+/* Search dropdown and date input */
 .select2-container {
   width: 100% !important;
 }
@@ -44,7 +45,7 @@ body {
 }
 
 .select2-container--default .select2-selection--single .select2-selection__arrow {
-  top: 8px;
+  top: 13px;
   right: 8px;
 }
 
@@ -58,4 +59,30 @@ body {
 
 [type=search] {
   outline-offset: initial;
+}
+
+.duet-date__input {
+  border: 1px solid var(--dark);
+  color: var(--dark);
+  padding: 14px 60px 14px 14px;
+}
+
+.select2-container--default .select2-selection--single {
+  padding: 14px;
+  border: 1px solid var(--dark);
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+  color: var(--dark);
+  line-height: 22px;
+}
+
+/* Search dropdown max-height */
+.select2-container--default .select2-results>.select2-results__options {
+  max-height: 300px;
+}
+
+/* Selected date range */
+.active {
+  text-decoration: underline;
 }

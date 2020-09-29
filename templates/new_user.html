@@ -5,21 +5,27 @@
 {% endblock %}
 
 {% block content %}
+<div class="col-lg-8">
+  <form action="/register" method="POST">
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" class="form-control" name="username" value="{{ username }}" />
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" class="form-control" name="password" />
+    </div>
+    <div class="form-group">
+      <label for="password_again">Password again</label>
+      <input type="password" class="form-control" name="password_again" />
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+{% endblock %}
 
-<form action="/register" method="POST">
-  <div class="form-group">
-    <label for="username">Username</label>
-    <input type="text" class="form-control" name="username" value="{{ username }}" />
-  </div>
-  <div class="form-group">
-    <label for="password">Password</label>
-    <input type="password" class="form-control" name="password" />
-  </div>
-  <div class="form-group">
-    <label for="password_again">Password again</label>
-    <input type="password" class="form-control" name="password_again" />
-  </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
-
+{% block script %}
+<script type="text/javascript">
+  // Check with JS that passwords match, before submitting the form
+</script>
 {% endblock %}
