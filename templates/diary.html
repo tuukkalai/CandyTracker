@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="col-lg-4 order-last">
+<div class="col-lg-4 order-lg-12">
 {% if session.user_id %}
 <div class="card card-body">
   <h5 class="card-title">Add new entry</h5>
@@ -18,8 +18,9 @@
     <div class="form-group">
       <label for="select-candy">Select candy</label>
       <select id="select-candy" class="form-control" name="select-candy">
+        <option></option>
       {% for item in candies %}
-        <option value="{{ item.id }}">{{ item.name }}</option>
+        <option value="{{ item.id }}">{{ item.name }} ({{ item.size }} g) - {{ item.company }}</span></option>
       {% endfor %}
       </select>
       <small id="candy-search-help" class="form-text text-muted">If candy not found, create entry with new by clicking <a href="#" data-toggle="collapse" data-target="#add-candy" aria-expanded="false" aria-controls="add-candy">here</a></small>
@@ -66,16 +67,51 @@
 </div>
 {% endif %}
 </div>
-<div class="col-lg-8">
+<div class="col-lg-8 order-lg-1">
   <div class="chart-container my-4">
     <canvas id="barChart"></canvas>
   </div>
-  <div class="form-group">
+  <div class="form-group text-center">
     <div class="btn-group" role="group" aria-label="Date range">
       <button type="button" class="btn btn-secondary active" id="range-7">Last 7 days</button>
       <button type="button" class="btn btn-secondary" id="range-14">Last 14 days</button>
       <button type="button" class="btn btn-secondary" id="range-31">Last month</button>
       <button type="button" class="btn btn-secondary" id="range-92">Last 3 months</button>
+    </div>
+  </div>
+  <h4 class="h4 my-4">Your additional stats</h4>
+  <div class="row row-cols-1 row-cols-md-2">
+    <div class="col mb-4">
+      <div class="card">          
+        <div class="card-body">
+          <h5 class="card-title" id="amount-of-entries">{{ user_data }}</h5>
+          <p class="card-text">Total amount of entries</p>
+        </div>
+      </div>
+    </div>
+    <div class="col mb-4">
+      <div class="card">          
+        <div class="card-body">
+          <h5 class="card-title" id="amount-of-candies">4,7 kg</h5>
+          <p class="card-text">Amount of candies consumed</p>
+        </div>
+      </div>
+    </div>
+    <div class="col mb-4">
+      <div class="card">          
+        <div class="card-body">
+          <h5 class="card-title" id="amount-of-sugar">200 g</h5>
+          <p class="card-text">Amount of sugar consumed</p>
+        </div>
+      </div>
+    </div>
+    <div class="col mb-4">
+      <div class="card">          
+        <div class="card-body">
+          <h5 class="card-title" id="difference">12 g</h5>
+          <p class="card-text">Difference in sugar consumption between last 7 days and total average</p>
+        </div>
+      </div>
     </div>
   </div>
 </div>

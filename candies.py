@@ -3,8 +3,8 @@ from posix import abort
 
 from db import db
 
-def get_candies():
-    sql = "SELECT name FROM candies"
+def get_all_candies():
+    sql = "SELECT id, name, company, size FROM candies"
     result = db.session.execute(sql)
     candies = result.fetchall()
     return candies

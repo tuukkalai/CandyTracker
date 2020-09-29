@@ -100,6 +100,13 @@ $(document).ready(function(){
     }
   }
 
+  // Additional stats
+  /* $('#amount-of-entries').text('test') */
+  /* $('#amount-of-candies').text('test') */
+  /* $('#amount-of-sugar').text('test') */
+  /* $('#difference').text('test') */
+
+
   // Init candyChart to scope outside reloadChart()
   var candyChart = {}
 
@@ -123,7 +130,7 @@ $(document).ready(function(){
       let difference = Math.floor((date-edate)/(1000*60*60*24))
       if(difference <= days){
         total += entries[i].total
-        candyData[days-difference] = entries[i].total
+        candyData[days-1-difference] = entries[i].total
       }
     }
 
@@ -143,7 +150,7 @@ $(document).ready(function(){
         labels: graphLabels,
         datasets: [{
           type: 'line',
-          label: 'Average',
+          label: 'Average of selected date range',
           backgroundColor: COLORS.blue,
           borderColor: COLORS.blue,
           borderDash: [5,5],

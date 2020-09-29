@@ -20,3 +20,10 @@ def get_sum_of_days():
     result = db.session.execute(sql,{"user":user})
     sums = result.fetchall()
     return sums
+
+def get_additional_user_data():
+    user = users.user_id()
+    sql = "SELECT Count(id) FROM entries where user_id=:user"
+    result = db.session.execute(sql,{"user":user})
+    data = result.fetchall()[0]
+    return data

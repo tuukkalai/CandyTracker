@@ -72,15 +72,13 @@ def diary():
     if not users.authenticated():
         abort(403)
     if request.method == "GET":
-        sql = "SELECT id, name, company FROM candies"
-        result = db.session.execute(sql)
-        all_candies = result.fetchall()
-        rows = entries.get_sum_of_days()
-        return render_template("diary.html", candies=all_candies, entries=rows)
+        all_candies = candies.get_all_candies()
+        all_entries = entries.get_sum_of_days()
+        user_data = entries.get_additional_user_data()
+        return render_template("diary.html", candies=all_candies, entries=all_entries, user_data=user_data)
     if request.method == "POST":
         candy = request.form["select-candy"]
         date = request.form["candy-date"]
-        print('candy date ' + date)
         tokenc = request.form["tokenc"]
         new_name = request.form["add-candy-name"]
         new_company = request.form["add-candy-company"]
