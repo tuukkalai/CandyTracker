@@ -100,13 +100,6 @@ $(document).ready(function(){
     }
   }
 
-  // Additional stats
-  /* $('#amount-of-entries').text('test') */
-  /* $('#amount-of-candies').text('test') */
-  /* $('#amount-of-sugar').text('test') */
-  /* $('#difference').text('test') */
-
-
   // Init candyChart to scope outside reloadChart()
   var candyChart = {}
 
@@ -114,6 +107,7 @@ $(document).ready(function(){
     // If reloadChart is called with previous chart, destroy previous chart
     if(typeof chart !== 'undefined'){
       chart.destroy()
+      $('.loading').show()
     }
 
     // Label-maker
@@ -144,7 +138,7 @@ $(document).ready(function(){
       averageData[j] = Math.floor((total/days) * 100) / 100
       k--
     }
-
+    $('.loading').hide()
     candyChart = new Chart($('#barChart'), {
       data: {
         labels: graphLabels,
