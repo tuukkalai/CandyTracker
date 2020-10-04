@@ -109,8 +109,8 @@
     <div class="col mb-4">
       <div class="card">          
         <div class="card-body">
-          <h5 class="card-title" id="difference">12 g</h5>
-          <p class="card-text">Difference in sugar consumption between last 7 days and total average</p>
+          <h5 class="card-title{%+ if user_data.diff < 0 %} text-success{% else %} text-danger{% endif %}" id="difference">{%+ if user_data.diff > 0 %}+{% endif %}{{ user_data.diff }} g</h5>
+          <p class="card-text">Difference in candy consumption between last week and the week before</p>
         </div>
       </div>
     </div>
