@@ -85,7 +85,7 @@
     <div class="col mb-4">
       <div class="card">          
         <div class="card-body">
-          <h5 class="card-title" id="amount-of-entries">{{ user_data.count }}</h5>
+          <h5 class="card-title" id="amount-of-entries">{%+ if user_data.count %}{{ user_data.count }}{% else %}No values{% endif %}</h5>
           <p class="card-text">Total amount of entries</p>
         </div>
       </div>
@@ -93,7 +93,7 @@
     <div class="col mb-4">
       <div class="card">          
         <div class="card-body">
-          <h5 class="card-title" id="amount-of-candies">{{ user_data.sum }} kg</h5>
+          <h5 class="card-title" id="amount-of-candies">{%+ if user_data.sum %}{{ user_data.sum }} kg{% else %}No values{% endif %}</h5>
           <p class="card-text">Amount of candies consumed</p>
         </div>
       </div>
@@ -101,7 +101,7 @@
     <div class="col mb-4">
       <div class="card">          
         <div class="card-body">
-          <h5 class="card-title" id="amount-of-sugar">{{ user_data.sugar }} kg</h5>
+          <h5 class="card-title" id="amount-of-sugar">{%+ if user_data.sugar %}{{ user_data.sugar }} g{% else %}No values{% endif %}</h5>
           <p class="card-text">Amount of sugar consumed</p>
         </div>
       </div>
@@ -109,7 +109,7 @@
     <div class="col mb-4">
       <div class="card">          
         <div class="card-body">
-          <h5 class="card-title{%+ if user_data.diff < 0 %} text-success{% else %} text-danger{% endif %}" id="difference">{%+ if user_data.diff > 0 %}+{% endif %}{{ user_data.diff }} g</h5>
+          {%+ if user_data.diff %}<h5 class="card-title{%+ if user_data.diff < 0 %} text-success{% else %} text-danger{% endif %}" id="difference">{%+ if user_data.diff > 0 %}+{% endif %}{{ user_data.diff }} g</h5>{% else %}<h5 class="card-title">No values</h5>{% endif %}
           <p class="card-text">Difference in candy consumption between last week and the week before</p>
         </div>
       </div>
