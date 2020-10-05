@@ -116,6 +116,27 @@
     </div>
   </div>
 </div>
+</div>
+<div class="row">
+  <div class="col-lg-8">
+    <h4 class="h4 my-4">All entries</h4>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Candy</th>
+          <th scope="col">Date (YYYY-MM-DD)</th>
+          <th scope="col">Remove</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in all_entries %}<tr>
+          <td>{{ a.name }}</td>
+          <td>{{ a.entry_time }}</td>
+          <td><a href="/entries/{{ a.id }}/delete" class="btn btn-danger"><svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="15" height="15"><path d="M4.5 3V1.5a1 1 0 011-1h4a1 1 0 011 1V3M0 3.5h15m-13.5 0v10a1 1 0 001 1h10a1 1 0 001-1v-10M7.5 7v5m-3-3v3m6-3v3" stroke="currentColor"></path></svg></a></td>
+        </tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
 {% endblock %}
 
 {% block script %}
@@ -124,7 +145,7 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 <script type="text/javascript">
-  let entries = [{% for e in entries %}{
+  let entries = [{% for e in daily_entries %}{
         "date": "{{ e.entry_time }}",
         "total": {{ e.total }}
       },{% endfor %}];

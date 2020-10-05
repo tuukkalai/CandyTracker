@@ -73,9 +73,10 @@ def diary():
         abort(403)
     if request.method == "GET":
         all_candies = candies.get_all_candies()
-        all_entries = entries.get_sum_of_days()
+        daily_entries = entries.get_sum_of_days()
         user_data = entries.get_additional_user_data()
-        return render_template("diary.html", candies=all_candies, entries=all_entries, user_data=user_data)
+        all_entries = entries.get_all_entries()
+        return render_template("diary.html", candies=all_candies, daily_entries=daily_entries, user_data=user_data, all_entries=all_entries)
     if request.method == "POST":
         candy = request.form["select-candy"]
         date = request.form["candy-date"]
@@ -90,6 +91,13 @@ def diary():
             candy = candies.add_candy(new_name, new_company, new_weight, new_sugar, new_gtin, new_category)
         if entries.add_entry(candy, date, tokenc):
             return redirect("/diary")
+
+@app.route("/entries/<int:id>/delete", methods=["GET"])
+def delete_entry(id):
+    if not users.authenticated():
+        abort(403)
+    if entries.delete_entry(id):
+        return redirect("/diary")
 
 """
 Training material

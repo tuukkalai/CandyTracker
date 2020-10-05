@@ -1,0 +1,37 @@
+Database
+--------
+
+
+Tables
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ entries                                                                 │
+╞════════════╤═══════════╤══════════╤═════════════════════════════════════╡
+│ id         │ integer   │ not null │ nextval('entries_id_seq'::regclass) │
+│ user_id    │ integer   │ not null │                                     │
+│ candy_id   │ integer   │ not null │                                     │
+│ entry_time │ timestamp │ not null │ CURRENT_DATE                        │
+└────────────┴───────────┴──────────┴─────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ candies                                                             │
+╞══════════╤═════════╤══════════╤═════════════════════════════════════╡
+│ id       │ integer │ not null │ nextval('candies_id_seq'::regclass) │
+│ name     │ text    │ not null │                                     │
+│ size     │ integer │          │                                     │
+│ sugar    │ integer │          │                                     │
+│ gtin     │ bigint  │          │                                     │
+│ company  │ text    │          │                                     │
+│ category │ text    │          │                                     │
+└──────────┴─────────┴──────────┴─────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ users                                                               │
+╞══════════╤═══════════╤══════════╤═══════════════════════════════════╡
+│ id       │ integer   │ not null │ nextval('users_id_seq'::regclass) │
+│ username │ text      │ not null │                                   │
+│ password │ text      │ not null │                                   │
+│ auth     │ text      │ not null │ 'user'::text                      │
+│ joined   │ timestamp │          │ now()                             │
+└──────────┴───────────┴──────────┴───────────────────────────────────┘
+
