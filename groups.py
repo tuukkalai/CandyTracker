@@ -12,15 +12,15 @@ def get_user_groups():
 def create_group(group, tokenc):
     if tokenc != session["tokenc"]:
         abort(403)
-        
-    # Lisää uusi ryhmä tietokantaan ja lisää käyttäjä ryhmän membereihin
+
+    # Add new group to database and current user as a member to that group
     user = users.user_id()
     sql = "INSERT INTO groups (name, members) VALUES (:group, ARRAY[:user])"
     db.session.execute(sql,{"group":group, "user":user})
     db.session.commit()
 
-    # RETURNING ei ilmeisesti toimi kun lisää psql vektoriin käyttäjän
-    # Uuden ryhmän id haetaan erillisellä SELECT kyselyllä
+    # RETURNING doesn't seem to work when adding values in array
+    # id of the new group is fetched with additional query
     sql = "SELECT id FROM groups WHERE name=:group"
     result = db.session.execute(sql,{"group":group})
     group_id = result.fetchone()[0]

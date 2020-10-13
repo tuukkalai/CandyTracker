@@ -1,3 +1,7 @@
+# Training material + database init values
+training.py
+database_init.sql
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

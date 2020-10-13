@@ -9,10 +9,12 @@ import candies
 import groups
 import json
 
+# Root
 @app.route("/")
 def home():
     return render_template("home.html")
 
+# Error handlers
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template("404.html", error=error), 404
@@ -37,6 +39,7 @@ def login():
         else:
             return render_template("home.html", notification="User not found or incorrect password")
 
+# User's pages
 @app.route("/logout")
 def logout():
     if users.logout():
@@ -68,6 +71,7 @@ def register():
         else:
             return render_template("new_user.html", username=username, notification="Username already taken, or password mismatch")
 
+# Diary
 @app.route("/diary", methods=["GET", "POST"])
 def diary():
     if not users.authenticated():
@@ -100,6 +104,7 @@ def delete_entry(id):
     if entries.delete_entry(id):
         return redirect("/diary")
 
+# Groups
 @app.route("/groups", methods=["GET", "POST"])
 def get_groups_post_group():
     if not users.authenticated():
@@ -123,135 +128,3 @@ def get_single_group(id):
     # Authentication
     return render_template("group.html", group=id)
 
-
-"""
-Training material
----
-"""
-# Pizza
-@app.route("/order")
-def form():
-    if not users.authenticated():
-        abort(403)
-    return render_template("order.html")
-
-@app.route("/result", methods=["POST"])
-def result():
-    if not users.authenticated():
-        abort(403)
-    pizza = request.form["pizza"]
-    extras = request.form.getlist("extra")
-    msg = request.form["message"]
-    return render_template("result.html", 
-        pizza=pizza, 
-        extras=extras, 
-        message=msg)
-
-# Messages
-@app.route("/messages")
-def messages():
-    if not users.authenticated():
-        abort(403)
-    result = db.session.execute("SELECT COUNT(*) FROM messages")
-    count = result.fetchone()[0]
-    result = db.session.execute("SELECT m.content, u.username FROM messages INNER JOIN users ON m.user_id = u.id")
-    messages = result.fetchall()
-    return render_template("messages.html", count=count, messages=messages)
-
-@app.route("/messages/new")
-def new():
-    if not users.authenticated():
-        abort(403)
-    return render_template("new.html")
-
-@app.route("/messages/send", methods=["POST"])
-def send():
-    if not users.authenticated():
-        abort(403)
-    content = request.form["content"]
-    user = users.user_id()
-    sql = "INSERT INTO messages (content, user_id) VALUES (:content, :user)"
-    db.session.execute(sql, {"content":content,"user":user})
-    db.session.commit()
-    return redirect("/messages")
-
-# Polls
-@app.route("/polls")
-def poll():
-    if not users.authenticated():
-        abort(403)
-    sql = "SELECT id, topic FROM polls"
-    result = db.session.execute(sql)
-    polls = result.fetchall()
-    return render_template("polls.html", polls=polls)
-
-@app.route("/polls/<int:id>")
-def showPoll(id):
-    if not users.authenticated():
-        abort(403)
-    sql = "SELECT topic, created_at FROM polls WHERE id=:id"
-    result = db.session.execute(sql, {"id":id})
-    res = result.fetchone()
-    if res:
-        topic = res[0]
-        created = res[1].strftime("%d.%m.%Y %H.%M")
-        sql = "SELECT id, choice FROM choices WHERE poll_id=:id"
-        result = db.session.execute(sql, {"id":id})
-        choices = result.fetchall()
-        return render_template("poll.html", topic=topic, choices=choices, created=created, id=id)
-    return 
-
-@app.route("/polls/answer", methods=["POST"])
-def ans():
-    if not users.authenticated():
-        abort(403)
-    choice_id = request.form["choice"]
-    poll_id = request.form["id"]
-    sql = "INSERT INTO answers (choice_id, sent_at) VALUES (:choice_id, NOW())"
-    db.session.execute(sql, {"choice_id":choice_id})
-    db.session.commit()
-    return redirect("/results/"+str(poll_id))
-
-@app.route("/results/<int:id>")
-def showResults(id):
-    if not users.authenticated():
-        abort(403)
-    sql = "SELECT topic FROM polls WHERE id=:id"
-    result = db.session.execute(sql, {"id":id})
-    topic = result.fetchone()[0]
-    sql = "SELECT c.choice, COUNT(a.id) FROM choices c LEFT JOIN answers a ON c.id = a.choice_id WHERE c.poll_id=:poll_id GROUP BY c.id"
-    result = db.session.execute(sql, {"poll_id":id})
-    choices = result.fetchall()
-    total = 0
-    for c in choices:
-        total += c[1]
-    return render_template("results.html", topic=topic, choices=choices, total=total)
-
-@app.route("/polls/new")
-def newPollForm():
-    if not users.authenticated():
-        abort(403)
-    return render_template("new_poll.html")
-
-@app.route("/polls/create", methods=["POST"])
-def createPoll():
-    if not users.authenticated():
-        abort(403)
-    topic = request.form["topic"]
-    sql = "INSERT INTO polls (topic, created_at) VALUES (:topic, NOW()) RETURNING id"
-    result = db.session.execute(sql, {"topic":topic})
-    poll_id = result.fetchone()[0]
-    choices = request.form.getlist("choice")
-    values = ""
-    for choice in choices:
-        if choice != "":
-            values += "("+str(poll_id)+", '"+choice+"'), "
-    sql = "INSERT INTO choices (poll_id, choice) VALUES "+values[:-2]
-    db.session.execute(sql)
-    db.session.commit()
-    return redirect("/polls")
-
-"""
-Training ends
----
-"""

@@ -1,5 +1,4 @@
 from flask import session
-from posix import abort
 
 from db import db
 
@@ -10,8 +9,16 @@ def get_all_candies():
     return candies
 
 def add_candy(name, company, weight, sugar, gtin, category):
-    sql = "INSERT INTO candies (name, company, size, sugar, gtin, category) VALUES (:name, :company, :size, :sugar, :gtin, :category) RETURNING id"
-    result = db.session.execute(sql,{"name":name, "company":company, "size":int(weight), "sugar":int(sugar), "gtin":int(gtin), "category":category})
+    sql = """INSERT INTO candies (name, company, size, sugar, gtin, category) 
+            VALUES (:name, :company, :size, :sugar, :gtin, :category) RETURNING id"""
+    result = db.session.execute(sql,{
+        "name":name,
+        "company":company,
+        "size":int(weight),
+        "sugar":int(sugar),
+        "gtin":int(gtin),
+        "category":category
+    })
     candy_id = result.fetchone()[0]
     return candy_id
 

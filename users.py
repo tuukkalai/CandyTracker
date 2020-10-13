@@ -21,6 +21,7 @@ def login(username, password):
         return False
     else:
         if check_password_hash(user[0],password):
+            # If user credentials are correct add items to session
             session["user_id"] = user[1]
             session["username"] = username
             session["tokenc"] = os.urandom(16).encode('hex') # local
@@ -30,12 +31,16 @@ def login(username, password):
             return False
 
 def logout():
+    # Remove added items from session
     del session["user_id"]
     del session["tokenc"]
     del session["username"]
     return True
 
 def change_password(password, password2, oldPassword, tokenc):
+    # Allow user with correct session token to update password
+    # Return tuple with first value (boolean) based on success
+    # and second as a notification text
     if tokenc != session["tokenc"]:
         abort(403)
     if password == password2:
@@ -54,6 +59,8 @@ def change_password(password, password2, oldPassword, tokenc):
         return [False, "Passwords don't match"]
 
 def create_user(username, password, passwordAgain):
+    # Check if username is available and two password inputs match
+    # Return to login with new credentials or back to create user page
     sql = "SELECT id FROM users WHERE username=:username"
     result = db.session.execute(sql, {"username":username})
     unamesInDb = result.fetchone()
