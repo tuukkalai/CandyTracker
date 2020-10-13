@@ -7,19 +7,19 @@
 {% block content %}
 <div class="col-lg-8">
   <form action="/settings" method="POST">
-    <h3 class="h3">Update password</h2>
+    <h3 class="h3">Update password</h3>
     <div class="form-group">
-      <label for="prevPass">Current password</label>
-      <input type="password" class="form-control" id="prevPass" name="prevPass">
+      <label for="prev-pass">Current password</label>
+      <input type="password" class="form-control" id="prev-pass" name="prev-pass">
     </div>
     <div class="form-group">
-      <label for="newPass1">New password</label>
-      <input type="password" class="form-control" id="newPass1" aria-describedby="newPassHelp" name="newPass1">
+      <label for="new-pass1">New password</label>
+      <input type="password" class="form-control" id="new-pass1" aria-describedby="newPassHelp" name="new-pass1">
       <small id="newPassHelp" class="form-text text-muted">Good password is long and it contains lowercase and uppercase characters, numbers and symbols. <a href="https://xkcd.com/936/" target="_blank">Help for selecting a password</a></small>
     </div>
     <div class="form-group">
-      <label for="newPass2">New password again</label>
-      <input type="password" class="form-control" id="newPass2" name="newPass2">
+      <label for="new-pass2">New password again</label>
+      <input type="password" class="form-control" id="new-pass2" name="new-pass2">
     </div>
     <input type="hidden" name="tokenc" value="{{ session.tokenc }}" />
     <button type="submit" class="btn btn-primary mb-2">Change password</button>

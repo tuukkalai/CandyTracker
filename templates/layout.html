@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <title>CandyTracker</title>
 
-<nav class="navbar navbar-expand-xl navbar-light bg-light rounded">
+<nav class="navbar navbar-expand-xl navbar-light bg-light">
   <a class="navbar-brand" href="/">CandyTracker</a>
   <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#navv" aria-controls="navv" aria-expanded="false" aria-label="Toggle navigation">
     <svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="30" height="30"><path d="M0 5.5h15m-15-4h15m-15 8h15m-15 4h15" stroke="currentColor"></path></svg>
@@ -20,6 +20,9 @@
       {% if session.user_id %}
       <li class="nav-item">
         <a class="nav-link" href="/diary">Diary</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/groups">Groups</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/polls">Polls</a>

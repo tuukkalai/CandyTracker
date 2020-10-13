@@ -21,7 +21,7 @@ CandyTrackerissä voit muodostaa kavereiden, tai vaikka tuntemattomien kanssa ry
 - [Bootstrap](https://getbootstrap.com/)
   - jonka osana mm. [jQuery](https://jquery.com/)
 - [Chart.js](https://www.chartjs.org/)
-- [https://select2.org/](Select2)
+- [Select2](https://select2.org/)
 - [Duet Date Picker](https://github.com/duetds/date-picker)
 - [Teenyicons](https://teenyicons.com/)
 
@@ -33,7 +33,7 @@ CandyTrackerissä voit muodostaa kavereiden, tai vaikka tuntemattomien kanssa ry
 - [x] Käyttäjä voi hakea makeisia valmistajan nimellä tai makeisen nimellä
 - [x] Käyttäjä voi lisätä puuttuvan makeisen listaan
 - [x] Käyttäjä voi lisätä omaan kulutushistoriaansa makeisen
-- [ ] Käyttäjä voi tarkastella omaa sokerin/makeisten kulutuksta
+- [x] Käyttäjä voi tarkastella omaa sokerin/makeisten kulutuksta
 
 #### Ryhmätoiminnot
 - [ ] Käyttäjä voi luoda ryhmän
@@ -41,6 +41,7 @@ CandyTrackerissä voit muodostaa kavereiden, tai vaikka tuntemattomien kanssa ry
 - [ ] Käyttäjä voi liittyä ryhmään
 - [ ] Käyttäjä voi poistua ryhmästä
 - [ ] Käyttäjä voi luoda haasteen/tavoitteen ryhmässä
+- [ ] Käyttäjä voi lähettää viestin ryhmässä
 
 ## Sovelluksen suorittaminen
 

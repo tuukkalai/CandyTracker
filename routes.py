@@ -6,6 +6,7 @@ from db import db
 import users
 import entries
 import candies
+import groups
 import json
 
 @app.route("/")
@@ -47,9 +48,9 @@ def settings():
     if request.method == "GET":
         return render_template("settings.html")
     if request.method == "POST":
-        password = request.form["newPass1"]
-        password2 = request.form["newPass2"]
-        oldPassword = request.form["prevPass"]
+        password = request.form["new-pass1"]
+        password2 = request.form["new-pass2"]
+        oldPassword = request.form["prev-pass"]
         tokenc = request.form["tokenc"]
         change = users.change_password(password, password2, oldPassword, tokenc)
     return render_template("settings.html", notification=change[1])
@@ -98,6 +99,30 @@ def delete_entry(id):
         abort(403)
     if entries.delete_entry(id):
         return redirect("/diary")
+
+@app.route("/groups", methods=["GET", "POST"])
+def get_groups_post_group():
+    if not users.authenticated():
+        abort(403)
+    else:
+        users_groups = groups.get_user_groups()
+        create = False if len(users_groups) > 5 else True
+    if request.method == "GET":
+        return render_template("groups.html", groups=users_groups, create=create)
+    if request.method == "POST":
+        group_name = request.form["group-name"]
+        tokenc = request.form["tokenc"]
+        group = groups.create_group(group_name, tokenc)
+        if group > 0:
+            return redirect("/groups/"+str(group))
+        else:
+            return render_template("groups.html", notification="Group not created, something went wrong", groups=users_groups, create=create)
+
+@app.route("/groups/<int:id>", methods=["GET"])
+def get_single_group(id):
+    # Authentication
+    return render_template("group.html", group=id)
+
 
 """
 Training material

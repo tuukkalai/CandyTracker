@@ -1,0 +1,32 @@
+{% extends 'layout.html' %}
+
+{% block header %}
+  Groups
+{% endblock %}
+
+{% block content %}
+  <div class="col-lg-8">
+    <h5 class="h5">Groups you're currently in</h5>
+    <ul class="list-group">
+      {% for g in groups %}
+      <a class="list-group-item list-group-item-action" href="/groups/{{ g.id }}">{{ g.name }}</a>
+      {% endfor %}
+    </ul>
+  </div>
+{% if create %}
+</div>
+<div class="row">
+  <div class="col-lg-8">
+    <form action="/groups" method="POST">
+      <h3 class="h3">Create new group</h3>
+        <div class="form-group">
+          <label for="group-name">Group name</label>
+          <input type="text" class="form-control" id="group-name" name="group-name" required>
+        </div>
+        <input type="hidden" name="tokenc" value="{{ session.tokenc }}" />
+        <button type="submit" class="btn btn-primary mb-2">Create group</button>
+    </form>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
