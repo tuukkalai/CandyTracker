@@ -125,6 +125,10 @@ def get_groups_post_group():
 
 @app.route("/groups/<int:id>", methods=["GET"])
 def get_single_group(id):
-    # Authentication
-    return render_template("group.html", group=id)
+    group_info = groups.get_group_details(id)
+    if not group_info:
+        return render_template("group.html", notification="No access to this group", group_info="No access")
+    else:
+        return render_template("group.html", group_id=id, group_info=group_info)
+        
 

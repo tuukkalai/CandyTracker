@@ -10,6 +10,14 @@ def authenticated():
         return True
     return False
 
+def is_admin():
+    sql = "SELECT auth FROM users WHERE id=:user"
+    result = db.session.execute(sql,{"user":user_id()})
+    user_auth = result.fetchone()[0]
+    if user_auth == 'admin':
+        return True
+    return False
+
 def user_id():
     return session.get("user_id",0)
 

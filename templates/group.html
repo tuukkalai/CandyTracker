@@ -1,11 +1,25 @@
 {% extends 'layout.html' %}
 
 {% block header %}
-  Group with id {{ group }}
+  {{ group_info.name }}
 {% endblock %}
 
 {% block content %}
-  <div class="col-lg-8">
-    <p>Group page</p>  
-  </div>
+{% if notification %}
+<div class="col-lg-8">
+  <p>No access</p>
+  <a href="/groups">&laquo; Back to Groups</a>
+</div>
+{% else %}
+<div class="col-lg-8">
+  <p>{%+ if group_info.no_of_members %}
+    This group has {{ group_info.no_of_members }} member{%+ if group_info.no_of_members != 1 %}s{% endif %}.
+    {% else %}
+    This group does not have members.{% endif %}</p>
+  <h2>
+    Challenges
+  </h2>
+  <h2>Messages</h2>
+</div>
+{% endif %}
 {% endblock %}
