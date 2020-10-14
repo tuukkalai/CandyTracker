@@ -18,6 +18,7 @@ def get_public_groups():
         FROM groups 
         WHERE open=true
         AND NOT(members @> ARRAY[:user])
+        AND NOT(requests @> ARRAY[:user])
         AND visible=true"""
     result = db.session.execute(sql, {"user":user})
     data = result.fetchall()
@@ -96,9 +97,7 @@ def user_request_to_group(group_id):
     sql = "SELECT 1 FROM groups WHERE requests @> ARRAY[:user] AND id=:group_id"
     result = db.session.execute(sql,{"user":user, "group_id":group_id})
     if result.fetchone() != None:
-        print('Request already in place')
         return False
-    print('No prior requests')
     sql = "UPDATE groups SET requests=requests || :user WHERE id=:group_id"
     db.session.execute(sql,{"user":user, "group_id":group_id})
     db.session.commit()
