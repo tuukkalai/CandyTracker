@@ -74,6 +74,20 @@
   </div>
 </div>
 
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true"><svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="15" height="15"><path d="M1.5 1.5l12 12m-12 0l12-12" stroke="currentColor"></path></svg></span>
+      </button>
+    </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
 {% if notification %}
 <div class="alert alert-warning alert-dismissible fade show" role="alert">
   {{ notification }}

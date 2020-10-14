@@ -1,5 +1,5 @@
 from app import app
-from flask import redirect, render_template, request, session, abort, jsonify
+from flask import flash, redirect, render_template, request, session, abort, jsonify
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from db import db
@@ -111,9 +111,10 @@ def get_groups_post_group():
         abort(403)
     else:
         users_groups = groups.get_user_groups()
+        public_groups = groups.get_public_groups()
         create = False if len(users_groups) > 5 else True
     if request.method == "GET":
-        return render_template("groups.html", groups=users_groups, create=create)
+        return render_template("groups.html", groups=users_groups, create=create, public_groups=public_groups)
     if request.method == "POST":
         group_name = request.form["group-name"]
         tokenc = request.form["tokenc"]
@@ -121,7 +122,11 @@ def get_groups_post_group():
         if group > 0:
             return redirect("/groups/"+str(group))
         else:
-            return render_template("groups.html", notification="Group not created, something went wrong", groups=users_groups, create=create)
+            return render_template("groups.html", 
+                    notification="Group not created, something went wrong", 
+                    groups=users_groups, 
+                    create=create, 
+                    public_groups=public_groups)
 
 @app.route("/groups/<int:id>", methods=["GET"])
 def get_single_group(id):
@@ -131,4 +136,17 @@ def get_single_group(id):
     else:
         return render_template("group.html", group_id=id, group_info=group_info)
         
+@app.route("/groups/<int:group_id>/accept/<string:username>", methods=["GET"])
+def allow_user_to_group(group_id, username):
+    if groups.accept_user_to_group(group_id, username):
+        return redirect("/groups/"+str(group_id))
 
+@app.route("/groups/<int:group_id>/request", methods=['GET'])
+def request_to_group(group_id):
+    if not users.authenticated():
+        abort(403)
+    if groups.user_request_to_group(group_id):
+        flash("Request sent to group")
+    else:
+        flash("Problems sending the request")
+    return redirect("/groups")

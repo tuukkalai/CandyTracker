@@ -12,6 +12,17 @@ def get_user_groups():
     data = result.fetchall()
     return data
 
+def get_public_groups():
+    user = users.user_id()
+    sql = """SELECT id, name 
+        FROM groups 
+        WHERE open=true
+        AND NOT(members @> ARRAY[:user])
+        AND visible=true"""
+    result = db.session.execute(sql, {"user":user})
+    data = result.fetchall()
+    return data
+
 def create_group(group_name, tokenc):
     if tokenc != session["tokenc"]:
         abort(403)
@@ -31,7 +42,23 @@ def create_group(group_name, tokenc):
 
 def get_group_details(group_id):
     if users.is_admin() or (users.authenticated and group_id in [n.id for n in get_user_groups()]):
-        sql = "SELECT name, array_length(members,1) AS no_of_members FROM groups WHERE id=:group_id"
+        # Select single row on information combining name of the group, number of users in the group and
+        # usernames of all the requests for joining the group
+        sql = """SELECT name, 
+                array_length(members,1) AS no_of_members,
+                (
+                    SELECT ARRAY(
+                        SELECT username 
+                        FROM users 
+                        WHERE id IN (
+                            SELECT UNNEST(requests) 
+                            FROM groups 
+                            WHERE id=:group_id
+                        )
+                    )
+                ) AS requests
+                FROM groups 
+                WHERE id=:group_id"""
         result = db.session.execute(sql,{"group_id":group_id})
         group_info = result.fetchall()[0]
         return group_info
@@ -50,8 +77,32 @@ def get_group_details(group_id):
 # users_in_group = result.fetchall()
 
 
-def add_member_to_group(member_id, group):
-    sql = "UPDATE groups SET members=members || :member_id WHERE name=:group"
+def accept_user_to_group(group_id, username):
+    if users.is_admin() or (users.authenticated and group_id in [n.id for n in get_user_groups()]):
+        try:
+            # Add user with username to members and remove user from group requests
+            sql = """UPDATE groups 
+                    SET members=members || (SELECT id FROM users WHERE username=:username),
+                        requests=array_remove(requests,(SELECT id FROM users WHERE username=:username))
+                    WHERE id=:group_id"""
+            db.session.execute(sql, {"username":username, "group_id":group_id})
+            db.session.commit()
+            return True
+        except:
+            return False
+
+def user_request_to_group(group_id):
+    user = users.user_id()
+    sql = "SELECT 1 FROM groups WHERE requests @> ARRAY[:user] AND id=:group_id"
+    result = db.session.execute(sql,{"user":user, "group_id":group_id})
+    if result.fetchone() != None:
+        print('Request already in place')
+        return False
+    print('No prior requests')
+    sql = "UPDATE groups SET requests=requests || :user WHERE id=:group_id"
+    db.session.execute(sql,{"user":user, "group_id":group_id})
+    db.session.commit()
+    return True
 
 def remove_member_from_group(member_id, group):
     sql = "UPDATE groups SET members=array_remove(members,:member_id) WHERE name=:group"

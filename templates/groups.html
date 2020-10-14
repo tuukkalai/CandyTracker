@@ -27,6 +27,30 @@
         <button type="submit" class="btn btn-primary mb-2">Create group</button>
     </form>
   </div>
-</div>
 {% endif %}
+</div>
+<div class="row">
+  <div class="col-lg-8">
+    <h2>Other public groups</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Group name</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {%+ for p in public_groups %}
+        <tr>
+          <td>
+            {{ p.name }}
+          </td>
+          <td>
+            <a href="/groups/{{ p.id }}/request" class="btn btn-primary"><svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="15" height="15"><path d="M7.5 1v13M1 7.5h13" stroke="currentColor"></path></svg> Request</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 {% endblock %}

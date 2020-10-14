@@ -16,6 +16,30 @@
     This group has {{ group_info.no_of_members }} member{%+ if group_info.no_of_members != 1 %}s{% endif %}.
     {% else %}
     This group does not have members.{% endif %}</p>
+  
+  {%+ if group_info.requests %}<h2>Requests</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Username</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in group_info.requests %}
+      <tr>
+        <td>
+          {{ r }}
+        </td>
+        <td>
+          <a href="/groups/{{ group_id }}/accept/{{ r }}" class="btn btn-success"><svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="15" height="15"><path d="M7.5 1v13M1 7.5h13" stroke="currentColor"></path></svg></a>&nbsp;<a href="/groups/{{ group_id }}/reject/{{ r }}" class="btn btn-danger"><svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="15" height="15"><path d="M4.5 3V1.5a1 1 0 011-1h4a1 1 0 011 1V3M0 3.5h15m-13.5 0v10a1 1 0 001 1h10a1 1 0 001-1v-10M7.5 7v5m-3-3v3m6-3v3" stroke="currentColor"></path></svg></a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+
   <h2>
     Challenges
   </h2>
