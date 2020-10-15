@@ -18,7 +18,8 @@ def get_public_groups():
         FROM groups 
         WHERE open=true
         AND NOT(members @> ARRAY[:user])
-        AND NOT(requests @> ARRAY[:user])
+        AND (NOT(requests @> ARRAY[:user])
+            OR requests IS NULL)
         AND visible=true"""
     result = db.session.execute(sql, {"user":user})
     data = result.fetchall()
