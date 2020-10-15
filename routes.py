@@ -149,5 +149,5 @@ def request_to_group(group_id):
     if groups.user_request_to_group(group_id):
         flash("Request sent to group")
     else:
-        flash("Problems sending the request")
+        flash("Previous request waiting for groups approval")
     return redirect("/groups")
