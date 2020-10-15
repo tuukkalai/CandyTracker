@@ -39,6 +39,19 @@
   </h2>
   <hr />
   <h2>Messages</h2>
+  {%+ for mes in messages %}
+    <div style="">
+      <span style="color:#999;font-size:12px;">({{ mes.timestamp }})</span> <span style="color:#666;">{{ mes.username }}</span>: <span style="color:#222;">{{ mes.content }}</span>
+    </div>
+  {% endfor %}
+  <form action="/groups/{{ group_id }}/send" method="POST">
+    <div class="form-group">
+      <label for="msg">Send a message</label>
+      <input type="text" class="msg" id="msg" name="msg" required>
+    </div>
+    <input type="hidden" name="tokenc" value="{{ session.tokenc }}" />
+    <button type="submit" class="btn btn-primary mb-2">Send</button>
+  </form>
   {%+ if group_admin %}<hr />
   <h3 class="h3">Users</h2>
   <table class="table">

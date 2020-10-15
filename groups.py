@@ -147,3 +147,25 @@ def toggle_public_private(group_id):
         db.session.commit()
         return True
     return False
+
+def get_messages(group_id):
+    # Get 30 latest messages
+    sql = """SELECT m.id, m.content, u.username, to_char(m.timestamp, 'dd.mm.yyyy hh:mm') AS timestamp
+            FROM messages m
+            INNER JOIN users u
+            ON u.id = m.user_id
+            WHERE group_id=:group_id
+            LIMIT 30"""
+    result = db.session.execute(sql, {"group_id":group_id})
+    data = result.fetchall()
+    return data
+
+def send_message(group_id, content):
+    if users.authenticated and group_id in [n.id for n in get_user_groups()]:
+        user = users.user_id()
+        sql = """INSERT INTO messages (content, user_id, group_id) 
+                VALUES (:content, :user, :group_id)"""
+        db.session.execute(sql, {"content":content,"user":user,"group_id":group_id})
+        db.session.commit()
+        return True
+    return False

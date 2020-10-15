@@ -131,11 +131,12 @@ def get_groups_post_group():
 @app.route("/groups/<int:group_id>", methods=["GET"])
 def get_single_group(group_id):
     group_info = groups.get_group_details(group_id)
-    is_group_admin = users.is_group_admin(group_id)
     if not group_info:
         return render_template("group.html", notification="No access to this group", group_info="No access")
     else:
-        return render_template("group.html", group_id=group_id, group_info=group_info, group_admin=is_group_admin)
+        is_group_admin = users.is_group_admin(group_id)
+        messages = groups.get_messages(group_id)
+        return render_template("group.html", group_id=group_id, group_info=group_info, group_admin=is_group_admin, messages=messages)
         
 @app.route("/groups/<int:group_id>/<string:action>/<string:username>", methods=["GET"])
 def allow_reject_user_group(action, group_id, username):
@@ -163,3 +164,9 @@ def toggle_group_public_private(group_id):
     if groups.toggle_public_private(group_id):
         flash("Group publicness changed")
     return get_single_group(group_id)
+
+@app.route("/groups/<int:group_id>/send", methods=["POST"])
+def send_message(group_id):
+    content = request.form["msg"]
+    if groups.send_message(group_id, content):
+        return redirect("/groups/"+str(group_id))
