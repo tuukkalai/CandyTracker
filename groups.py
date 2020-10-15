@@ -103,5 +103,11 @@ def user_request_to_group(group_id):
     db.session.commit()
     return True
 
-def remove_member_from_group(member_id, group):
-    sql = "UPDATE groups SET members=array_remove(members,:member_id) WHERE name=:group"
+def remove_member_from_group(user_id, group_id):
+    # If user is groups admin (first member), user is able to remove other users from group
+    if users.is_group_admin(group_id) or users.is_admin():
+        sql = "UPDATE groups SET members=array_remove(members,:user_id) WHERE id=:group_id"
+        db.session.execute(sql, {"user_id":user_id,"group_id":group_id})
+        db.session.commit()
+        return True
+    return False

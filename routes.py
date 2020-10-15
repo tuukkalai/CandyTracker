@@ -128,13 +128,14 @@ def get_groups_post_group():
                     create=create, 
                     public_groups=public_groups)
 
-@app.route("/groups/<int:id>", methods=["GET"])
-def get_single_group(id):
-    group_info = groups.get_group_details(id)
+@app.route("/groups/<int:group_id>", methods=["GET"])
+def get_single_group(group_id):
+    group_info = groups.get_group_details(group_id)
+    is_group_admin = users.is_group_admin(group_id)
     if not group_info:
         return render_template("group.html", notification="No access to this group", group_info="No access")
     else:
-        return render_template("group.html", group_id=id, group_info=group_info)
+        return render_template("group.html", group_id=group_id, group_info=group_info, group_admin=is_group_admin)
         
 @app.route("/groups/<int:group_id>/accept/<string:username>", methods=["GET"])
 def allow_user_to_group(group_id, username):
