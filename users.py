@@ -43,8 +43,8 @@ def login(username, password):
             # If user credentials are correct add items to session
             session["user_id"] = user[1]
             session["username"] = username
-            session["tokenc"] = os.urandom(16).encode('hex') # local
-            # session["tokenc"] = os.urandom(16).hex()       # prod
+            # session["tokenc"] = os.urandom(16).encode('hex') # local
+            session["tokenc"] = os.urandom(16).hex()       # prod
             return True
         else:
             return False
