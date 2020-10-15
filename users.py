@@ -19,12 +19,13 @@ def is_admin():
     return False
 
 def is_group_admin(group_id):
-		sql = "SELECT members[0] FROM groups WHERE id=:group_id"
-		result = db.session.execute(sql, {"group_id":group_id})
-		admin = result.fetchone() # or fetchone()[0] ??
-		if user_id() == admin:
-				return True
-		return False
+    sql = "SELECT members[1] FROM groups WHERE id=:group_id"
+    result = db.session.execute(sql, {"group_id":group_id})
+    admin = result.fetchone()[0] # or fetchone()[0] ??
+    print(admin)
+    if user_id() == admin:
+        return True
+    return False
 
 def user_id():
     return session.get("user_id",0)
