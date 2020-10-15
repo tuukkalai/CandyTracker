@@ -5,32 +5,29 @@
 {% endblock %}
 
 {% block content %}
-  <div class="col-lg-8">
+{% if create %}
+  <div class="col-lg-4 order-lg-12">
+    <div class="card card-body">
+      <h5 class="card-title">Create new group</h5>
+      <form action="/groups" method="POST">
+          <div class="form-group">
+            <label for="group-name">Group name</label>
+            <input type="text" class="form-control" id="group-name" name="group-name" required>
+          </div>
+          <input type="hidden" name="tokenc" value="{{ session.tokenc }}" />
+          <button type="submit" class="btn btn-primary mb-2">Create group</button>
+      </form>
+    </div>
+  </div>
+{% endif %}
+  <div class="col-lg-8 order-lg-1">
     <h5 class="h5">Groups you're currently in</h5>
     <ul class="list-group">
       {% for g in groups %}
       <a class="list-group-item list-group-item-action" href="/groups/{{ g.id }}">{{ g.name }}</a>
       {% endfor %}
     </ul>
-  </div>
-{% if create %}
-</div>
-<div class="row">
-  <div class="col-lg-8">
-    <form action="/groups" method="POST">
-      <h3 class="h3">Create new group</h3>
-        <div class="form-group">
-          <label for="group-name">Group name</label>
-          <input type="text" class="form-control" id="group-name" name="group-name" required>
-        </div>
-        <input type="hidden" name="tokenc" value="{{ session.tokenc }}" />
-        <button type="submit" class="btn btn-primary mb-2">Create group</button>
-    </form>
-  </div>
-{% endif %}
-</div>
-<div class="row">
-  <div class="col-lg-8">
+    <hr />
     <h2>Other public groups</h2>
     <table class="table">
       <thead>

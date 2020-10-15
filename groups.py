@@ -46,7 +46,17 @@ def get_group_details(group_id):
         # Select single row on information combining name of the group, number of users in the group and
         # usernames of all the requests for joining the group
         sql = """SELECT name, 
-                array_length(members,1) AS no_of_members,
+                (
+                    SELECT ARRAY(
+                        SELECT username 
+                        FROM users 
+                        WHERE id IN (
+                            SELECT UNNEST(members)
+                            FROM groups 
+                            WHERE id=:group_id
+                        )
+                    )
+                ) AS members,
                 (
                     SELECT ARRAY(
                         SELECT username 
@@ -57,7 +67,8 @@ def get_group_details(group_id):
                             WHERE id=:group_id
                         )
                     )
-                ) AS requests
+                ) AS requests,
+                open
                 FROM groups 
                 WHERE id=:group_id"""
         result = db.session.execute(sql,{"group_id":group_id})
@@ -92,6 +103,20 @@ def accept_user_to_group(group_id, username):
         except:
             return False
 
+def reject_user_from_group(group_id, username):
+    if users.is_admin() or (users.authenticated and group_id in [n.id for n in get_user_groups()]):
+        try:
+            # Remove user request with username to group
+            sql = """UPDATE groups 
+                    SET requests=array_remove(requests,(SELECT id FROM users WHERE username=:username))
+                    WHERE id=:group_id"""
+            db.session.execute(sql, {"username":username, "group_id":group_id})
+            db.session.commit()
+            return True
+        except:
+            return False
+
+
 def user_request_to_group(group_id):
     user = users.user_id()
     sql = "SELECT 1 FROM groups WHERE requests @> ARRAY[:user] AND id=:group_id"
@@ -103,11 +128,21 @@ def user_request_to_group(group_id):
     db.session.commit()
     return True
 
-def remove_member_from_group(user_id, group_id):
+def remove_member_from_group(group_id, username):
     # If user is groups admin (first member), user is able to remove other users from group
+    if users.is_group_admin(group_id) or users.is_admin() or users.username() == username:
+        sql = """UPDATE groups 
+                SET members=array_remove(members,(SELECT id FROM users WHERE username=:username)) 
+                WHERE id=:group_id"""
+        db.session.execute(sql, {"username":username,"group_id":group_id})
+        db.session.commit()
+        return True
+    return False
+
+def toggle_public_private(group_id):
     if users.is_group_admin(group_id) or users.is_admin():
-        sql = "UPDATE groups SET members=array_remove(members,:user_id) WHERE id=:group_id"
-        db.session.execute(sql, {"user_id":user_id,"group_id":group_id})
+        sql = "UPDATE groups SET open=NOT(open) WHERE id=:group_id"
+        db.session.execute(sql, {"group_id":group_id})
         db.session.commit()
         return True
     return False

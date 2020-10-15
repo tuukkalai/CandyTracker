@@ -22,13 +22,15 @@ def is_group_admin(group_id):
     sql = "SELECT members[1] FROM groups WHERE id=:group_id"
     result = db.session.execute(sql, {"group_id":group_id})
     admin = result.fetchone()[0]
-    print(admin)
     if user_id() == admin:
         return True
     return False
 
 def user_id():
     return session.get("user_id",0)
+
+def username():
+    return session.get("username",0)
 
 def login(username, password):
     sql = "SELECT password, id FROM users WHERE username=:username"

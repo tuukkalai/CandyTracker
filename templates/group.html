@@ -11,13 +11,8 @@
   <a href="/groups">&laquo; Back to Groups</a>
 </div>
 {% else %}
-<div class="col-lg-8">
-  <p>{%+ if group_info.no_of_members %}
-    This group has {{ group_info.no_of_members }} member{%+ if group_info.no_of_members != 1 %}s{% endif %}.
-    {% else %}
-    This group does not have members.{% endif %}</p>
-  
-  {%+ if group_info.requests %}<h2>Requests</h2>
+<div class="col-lg-8">  
+  {%+ if group_info.requests %}<h3 class="h3">Requests</h2>
   <table class="table">
     <thead>
       <tr>
@@ -39,11 +34,42 @@
     </tbody>
   </table>
   {% endif %}
-  {%+ if group_admin %}<h2>HERE'S THE GROUP ADMIN</h2>{% endif %}
   <h2>
     Challenges
   </h2>
+  <hr />
   <h2>Messages</h2>
+  {%+ if group_admin %}<hr />
+  <h3 class="h3">Users</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Username</th>
+        <th scope="col">Remove user</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for m in group_info.members %}
+      <tr>
+        <td>
+          {{ m }}
+        </td>
+        <td>
+          <a href="/groups/{{ group_id }}/remove/{{ m }}" class="btn btn-danger"><svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="15" height="15"><path d="M4.5 3V1.5a1 1 0 011-1h4a1 1 0 011 1V3M0 3.5h15m-13.5 0v10a1 1 0 001 1h10a1 1 0 001-1v-10M7.5 7v5m-3-3v3m6-3v3" stroke="currentColor"></path></svg></a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <hr />
+  <h3 class="h3">Make group {%+ if group_info.open %}private{% else %}open{% endif %}</h3>
+  <p>
+    <a href="/groups/{{ group_id }}/public">Go {%+ if group_info.open %}private{% else %}open{% endif %}</a>
+  </p>
+  {% endif %}
+  <hr />
+  <h3 class="h3">Quit this group</h3>
+  <a href="/groups/{{ group_id }}/remove/{{ session.username }}">Quit this group</a>
 </div>
 {% endif %}
 {% endblock %}

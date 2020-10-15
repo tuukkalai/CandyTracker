@@ -137,9 +137,15 @@ def get_single_group(group_id):
     else:
         return render_template("group.html", group_id=group_id, group_info=group_info, group_admin=is_group_admin)
         
-@app.route("/groups/<int:group_id>/accept/<string:username>", methods=["GET"])
-def allow_user_to_group(group_id, username):
-    if groups.accept_user_to_group(group_id, username):
+@app.route("/groups/<int:group_id>/<string:action>/<string:username>", methods=["GET"])
+def allow_reject_user_group(action, group_id, username):
+    if action == "accept" and groups.accept_user_to_group(group_id, username):
+        return redirect("/groups/"+str(group_id))
+    if action == "reject" and groups.reject_user_from_group(group_id, username):
+        return redirect("/groups/"+str(group_id))
+    if action == "remove" and groups.remove_member_from_group(group_id, username):
+        if username == users.username():
+            return redirect("/groups")
         return redirect("/groups/"+str(group_id))
 
 @app.route("/groups/<int:group_id>/request", methods=['GET'])
@@ -151,3 +157,9 @@ def request_to_group(group_id):
     else:
         flash("Previous request waiting for groups approval")
     return redirect("/groups")
+
+@app.route("/groups/<int:group_id>/public", methods=["GET"])
+def toggle_group_public_private(group_id):
+    if groups.toggle_public_private(group_id):
+        flash("Group publicness changed")
+    return get_single_group(group_id)
