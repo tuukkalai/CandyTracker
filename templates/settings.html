@@ -10,19 +10,29 @@
     <h3 class="h3">Update password</h3>
     <div class="form-group">
       <label for="prev-pass">Current password</label>
-      <input type="password" class="form-control" id="prev-pass" name="prev-pass">
+      <input type="password" class="form-control" id="prev-pass" name="prev-pass" required>
     </div>
     <div class="form-group">
       <label for="new-pass1">New password</label>
-      <input type="password" class="form-control" id="new-pass1" aria-describedby="newPassHelp" name="new-pass1">
+      <input type="password" class="form-control" id="new-pass1" aria-describedby="newPassHelp" name="new-pass1" required>
       <small id="newPassHelp" class="form-text text-muted">Good password is long and it contains lowercase and uppercase characters, numbers and symbols. <a href="https://xkcd.com/936/" target="_blank">Help for selecting a password</a></small>
     </div>
     <div class="form-group">
       <label for="new-pass2">New password again</label>
-      <input type="password" class="form-control" id="new-pass2" name="new-pass2">
+      <input type="password" class="form-control" id="new-pass2" name="new-pass2" required>
     </div>
     <input type="hidden" name="tokenc" value="{{ session.tokenc }}" />
     <button type="submit" class="btn btn-primary mb-2">Change password</button>
+  </form>
+  <hr />
+  <form action="/settings/deleteaccount" method="POST">
+    <h3 class="h3">Delete account</h3>
+    <div class="form-group">
+      <label for="delete-pass">Password</label>
+      <input type="password" class="form-control" id="delete-pass" name="delete-pass" required>
+    </div>
+    <input type="hidden" name="tokenc" value="{{ session.tokenc }}" />
+    <button type="submit" class="btn btn-primary mb-2">Delete account</button>
   </form>
 </div>
 {% endblock %}

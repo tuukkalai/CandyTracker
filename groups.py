@@ -46,12 +46,14 @@ def get_group_details(group_id):
     if users.is_admin() or (users.authenticated and group_id in [n.id for n in get_user_groups()]):
         # Select single row on information combining name of the group, number of users in the group and
         # usernames of all the requests for joining the group
+        # Deleted accounts (visible=false) are excluded
         sql = """SELECT name, 
                 (
                     SELECT ARRAY(
                         SELECT username 
                         FROM users 
-                        WHERE id IN (
+                        WHERE visible=true
+                        AND id IN (
                             SELECT UNNEST(members)
                             FROM groups 
                             WHERE id=:group_id
@@ -62,7 +64,8 @@ def get_group_details(group_id):
                     SELECT ARRAY(
                         SELECT username 
                         FROM users 
-                        WHERE id IN (
+                        WHERE visible=true
+                        AND id IN (
                             SELECT UNNEST(requests) 
                             FROM groups 
                             WHERE id=:group_id

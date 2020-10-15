@@ -19,6 +19,8 @@ def is_admin():
     return False
 
 def is_group_admin(group_id):
+    # Group admin is the first cell in members array
+    # If said user deletes the account, the group does not have admin
     sql = "SELECT members[1] FROM groups WHERE id=:group_id"
     result = db.session.execute(sql, {"group_id":group_id})
     admin = result.fetchone()[0]
@@ -33,7 +35,10 @@ def username():
     return session.get("username",0)
 
 def login(username, password):
-    sql = "SELECT password, id FROM users WHERE username=:username"
+    sql = """SELECT password, id 
+            FROM users 
+            WHERE username=:username 
+            AND visible=true"""
     result = db.session.execute(sql,{"username":username})
     user = result.fetchone()
     if user == None:
@@ -91,4 +96,18 @@ def create_user(username, password, passwordAgain):
         db.session.execute(sql, {"username":username,"password":hash_value})
         db.session.commit()
         return login(username, password)
+    return False
+
+def delete_account(password, tokenc):
+    if tokenc != session["tokenc"]:
+        abort(403)
+    user = user_id()
+    sql = "SELECT password FROM users WHERE id=:user"
+    result = db.session.execute(sql,{"user":user})
+    pas = result.fetchone()[0]
+    if check_password_hash(pas, password):
+        sql = "UPDATE users SET visible=false WHERE id=:user"
+        db.session.execute(sql,{"user":user})
+        db.session.commit()
+        return True
     return False

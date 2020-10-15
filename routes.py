@@ -58,6 +58,17 @@ def settings():
         change = users.change_password(password, password2, oldPassword, tokenc)
     return render_template("settings.html", notification=change[1])
 
+@app.route("/settings/deleteaccount", methods=["POST"])
+def delete_account():
+    if request.method == "POST":
+        password = request.form["delete-pass"]
+        tokenc = request.form["tokenc"]
+        if users.delete_account(password, tokenc):
+            flash("Account deleted")
+            return logout()
+    flash("Wrong password")
+    return redirect("/settings")
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "GET":
