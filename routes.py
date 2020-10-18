@@ -39,7 +39,7 @@ def login():
         else:
             return render_template("home.html", notification="User not found or incorrect password")
 
-# User's pages
+# Settings
 @app.route("/logout")
 def logout():
     if users.logout():
@@ -74,9 +74,9 @@ def register():
     if request.method == "GET":
         return render_template("new_user.html")
     if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
-        passwordAgain = request.form["password_again"]
+        username = request.form["reg-username"]
+        password = request.form["reg-password"]
+        passwordAgain = request.form["reg-password_again"]
         if users.create_user(username, password, passwordAgain):
             return redirect("/")
         else:

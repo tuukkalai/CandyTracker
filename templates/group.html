@@ -45,12 +45,13 @@
     </div>
   {% endfor %}
   <form action="/groups/{{ group_id }}/send" method="POST">
-    <div class="form-group">
-      <label for="msg">Send a message</label>
-      <input type="text" class="msg" id="msg" name="msg" required>
-    </div>
     <input type="hidden" name="tokenc" value="{{ session.tokenc }}" />
-    <button type="submit" class="btn btn-primary mb-2">Send</button>
+    <div class="input-group my-3">
+      <input type="text" class="form-control" placeholder="Send a message" aria-label="Send a message" aria-describedby="send-msg" name="msg" required>
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="submit" id="send-msg">Send</button>
+      </div>
+    </div>
   </form>
   {%+ if group_admin %}<hr />
   <h3 class="h3">Users</h2>

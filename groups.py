@@ -140,6 +140,14 @@ def remove_member_from_group(group_id, username):
                 WHERE id=:group_id"""
         db.session.execute(sql, {"username":username,"group_id":group_id})
         db.session.commit()
+        sql = "SELECT array_length(members,1) FROM groups WHERE id=:group_id"
+        result = db.session.execute(sql, {"group_id":group_id})
+        length = result.fetchone()[0]
+        print("Length of array : " + str(length))
+        if length < 1:
+            sql = "UPDATE groups SET visible=false WHERE id=:group_id"
+            db.session.execute(sql,{"group_id":group_id})
+            db.session.commit()
         return True
     return False
 
