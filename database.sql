@@ -28,3 +28,28 @@ CREATE TABLE groups (
   open BOOLEAN NOT NULL DEFAULT false,
   visible BOOLEAN NOT NULL DEFAULT true
 );
+CREATE TABLE messages (
+  id SERIAL PRIMARY KEY,
+  content TEXT NOT NULL,
+  user_id INTEGER NOT NULL REFERENCES users,
+  timestamp TIMESTAMP DEFAULT NOW(),
+  group_id INTEGER NOT NULL REFERENCES groups
+);
+CREATE TABLE challenges (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  min INTEGER NOT NULL DEFAULT 0,
+  max INTEGER NOT NULL DEFAULT 0,
+  avg INTEGER NOT NULL DEFAULT 0,
+  min_days INTEGER NOT NULL DEFAULT 0,
+  max_days INTEGER NOT NULL DEFAULT 0,
+  start_date DATE DEFAULT CURRENT_DATE,
+  end_date DATE DEFAULT CURRENT_DATE
+);
+CREATE TABLE group_challenges (
+  id SERIAL PRIMARY KEY,
+  challenge_id INTEGER NOT NULL REFERENCES challenges,
+  group_id INTEGER NOT NULL REFERENCES groups,
+  date_completed DATE,
+  date_started DATE
+);

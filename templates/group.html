@@ -34,15 +34,59 @@
     </tbody>
   </table>
   {% endif %}
-  <h2>
-    Challenges
-  </h2>
+  {% if group_challenges %}
+    <h2>
+      Active challenges
+    </h2>
+    <p>Only challenges that have today in timeperiod shown here. </p>
+    <div class="row">
+    {% for id, name, race_users in group_challenges %}
+      <div class="col-6 col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ name }}</h5>
+            <p class="card-text">{{ race_users }} member{%+ if race_users != 1 %}s{% endif %} of this group still able to achieve this.</p>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <h3 class="h3">Start new challenge</h3>
+  <form action="/groups/{{ group_id }}/newchallenge" method="POST">
+    <div class="form-group">
+      <label for="select-challenge">Select challenge</label>
+      <select class="form-control" id="select-challenge" name="select-challenge">
+        {%+ for ch in inactive_challenges %}<option value="{{ ch.id }}">{{ ch.name }}</option>{% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary mb-2">Start challenge</button>
+  </form>
   <hr />
+  {% if prev_challenges %}
+    <h2>
+      Challenge history
+    </h2>
+    <p>20 of the previous challenges listed here</p>
+    <div class="row">
+    {% for id, name, race_users in prev_challenges %}
+      <div class="col-6 col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ name }}</h5>
+            <p class="card-text">{{ race_users }} member{%+ if race_users != 1 %}s{% endif %} were able to complete this challenge!</p>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  <hr />
+  {% endif %}
   <h2>Messages</h2>
   {%+ for mes in messages %}
-    <div style="">
-      <span style="color:#999;font-size:12px;">({{ mes.timestamp }})</span> <span style="color:#666;">{{ mes.username }}</span>: <span style="color:#222;">{{ mes.content }}</span>
-    </div>
+  <div>
+    <span style="color:#999;font-size:12px;">({{ mes.timestamp }})</span> <span style="color:#666;">{{ mes.username }}</span>: <span style="color:#222;">{{ mes.content }}</span>
+  </div>
   {% endfor %}
   <form action="/groups/{{ group_id }}/send" method="POST">
     <input type="hidden" name="tokenc" value="{{ session.tokenc }}" />

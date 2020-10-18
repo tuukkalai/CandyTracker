@@ -147,7 +147,24 @@ def get_single_group(group_id):
     else:
         is_group_admin = users.is_group_admin(group_id)
         messages = groups.get_messages(group_id)
-        return render_template("group.html", group_id=group_id, group_info=group_info, group_admin=is_group_admin, messages=messages)
+        active_challenges = groups.get_all_active_challenges(group_id)
+        group_challenges = []
+        for c in active_challenges:
+            group_challenges.append([c.id, c.name, groups.get_no_of_users_still_in_the_race(group_id, c.id)])
+        inactive_challenges = groups.get_all_inactive_challenges(group_id)
+        prev_challenges = []
+        previous_challenges = groups.get_20_previous_challenges(group_id)
+        for ch in previous_challenges:
+            prev_challenges.append([ch.id, ch.name, groups.get_no_of_users_still_in_the_race(group_id, ch.id)])
+        print(prev_challenges)
+        return render_template("group.html", 
+                                group_id=group_id, 
+                                group_info=group_info, 
+                                group_admin=is_group_admin, 
+                                messages=messages,
+                                group_challenges=group_challenges,
+                                inactive_challenges=inactive_challenges,
+                                prev_challenges=prev_challenges)
         
 @app.route("/groups/<int:group_id>/<string:action>/<string:username>", methods=["GET"])
 def allow_reject_user_group(action, group_id, username):
@@ -181,3 +198,12 @@ def send_message(group_id):
     content = request.form["msg"]
     if groups.send_message(group_id, content):
         return redirect("/groups/"+str(group_id))
+
+@app.route("/groups/<int:group_id>/newchallenge", methods=["POST"])
+def start_challenge(group_id):
+    challenge = request.form["select-challenge"]
+    if groups.start_challenge(group_id, challenge):
+        flash("Challenge started")
+    else:
+        flash("Unable to start that challenge")
+    return redirect("/groups/"+str(group_id))

@@ -161,7 +161,7 @@ def toggle_public_private(group_id):
 
 def get_messages(group_id):
     # Get 30 latest messages
-    sql = """SELECT m.id, m.content, u.username, to_char(m.timestamp, 'dd.mm.yyyy hh:mm') AS timestamp
+    sql = """SELECT m.id, m.content, u.username, to_char(m.timestamp, 'dd.mm.yyyy hh:MI') AS timestamp
             FROM messages m
             INNER JOIN users u
             ON u.id = m.user_id
@@ -177,6 +177,69 @@ def send_message(group_id, content):
         sql = """INSERT INTO messages (content, user_id, group_id) 
                 VALUES (:content, :user, :group_id)"""
         db.session.execute(sql, {"content":content,"user":user,"group_id":group_id})
+        db.session.commit()
+        return True
+    return False
+
+# Challenges
+def get_all_inactive_challenges(group_id):
+    sql = """SELECT c.id, c.name
+            FROM challenges c 
+            LEFT OUTER JOIN group_challenges g 
+            ON c.id=g.challenge_id 
+            WHERE g.group_id <> :group_id
+            OR g.group_id IS NULL"""
+    result = db.session.execute(sql, {"group_id":group_id})
+    inactive_challenges = result.fetchall()
+    return inactive_challenges
+
+def get_all_active_challenges(group_id):
+    sql = """SELECT c.id, c.name
+            FROM challenges c 
+            INNER JOIN group_challenges g 
+            ON c.id=g.challenge_id 
+            WHERE g.group_id=:group_id
+            AND c.start_date <= CURRENT_DATE
+            AND c.end_date >= CURRENT_DATE"""
+    result = db.session.execute(sql, {"group_id":group_id})
+    active_challenges = result.fetchall()
+    return active_challenges
+
+def get_20_previous_challenges(group_id):
+    sql = """SELECT c.id, c.name
+            FROM challenges c 
+            INNER JOIN group_challenges g 
+            ON c.id=g.challenge_id 
+            WHERE g.group_id=:group_id
+            AND c.end_date < CURRENT_DATE
+            LIMIT 20"""
+    result = db.session.execute(sql,{"group_id":group_id})
+    previous_challenges = result.fetchall()
+    return previous_challenges
+
+def get_no_of_users_still_in_the_race(group_id, challenge_id):
+    sql = """SELECT COUNT(*) FROM (
+            SELECT u.id, SUM(c.size) AS sum 
+            FROM users u 
+            INNER JOIN entries e 
+            ON u.id = e.user_id
+            INNER JOIN candies c
+            ON e.candy_id=c.id
+            WHERE u.id IN (SELECT unnest(members) FROM groups WHERE id=:group_id)
+            AND e.entry_time BETWEEN (SELECT start_date FROM challenges WHERE id=:challenge_id) AND (SELECT end_date FROM challenges WHERE id=:challenge_id)
+            AND e.visible=true
+            GROUP BY u.id) AS foo
+            WHERE sum <= (SELECT max FROM challenges WHERE id=:challenge_id)"""
+    result = db.session.execute(sql,{"group_id":group_id,"challenge_id":challenge_id})
+    race_users = result.fetchone()[0]
+    return race_users
+
+
+def start_challenge(group_id, challenge):
+    if users.authenticated and group_id in [n.id for n in get_user_groups()]:
+        sql = """INSERT INTO group_challenges (challenge_id, group_id, date_started) 
+                VALUES (:challenge, :group_id, NOW())""" 
+        db.session.execute(sql, {"challenge":challenge, "group_id":group_id})
         db.session.commit()
         return True
     return False
