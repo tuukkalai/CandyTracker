@@ -99,3 +99,8 @@ body {
 .loading svg {
   margin: 20px auto;
 }
+
+
+#select-candy.is-invalid ~ .select2 .selection .select2-selection {
+  border: 1px solid #ee1010;
+}

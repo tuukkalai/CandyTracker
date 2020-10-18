@@ -14,7 +14,7 @@
 {% if session.user_id %}
 <div class="card card-body">
   <h5 class="card-title">Add new entry</h5>
-  <form action="/diary" method="POST">
+  <form action="/diary" id="diary-form" method="POST">
     <div class="form-group">
       <label for="select-candy">Select candy</label>
       <select id="select-candy" class="form-control" name="select-candy">
@@ -37,17 +37,17 @@
         </div>
         <div class="form-group">
           <label for="add-candy-weight">Weight (g)</label>
-          <input class="form-control" type="text" name="add-candy-weight" />
+          <input class="form-control" type="number" min="1" max="6000" name="add-candy-weight" />
           <small id="add-candy-weight-help" class="form-text text-muted">Add weight of single bag, box or bar in grams.</small>
         </div>
         <div class="form-group">
           <label for="add-candy-sugar">Sugar (g)</label>
-          <input class="form-control" type="text" name="add-candy-sugar" />
+          <input class="form-control" type="number" min="1" max="6000" name="add-candy-sugar" />
           <small id="add-candy-sugar-help" class="form-text text-muted">Add weight of sugar in single bag, box or bar in grams.</small>
         </div>
         <div class="form-group">
           <label for="add-candy-gtin">Global Trade Item Number (GTIN)</label>
-          <input class="form-control" type="text" name="add-candy-gtin" />
+          <input class="form-control" type="number" min="100000000000" max="99999999999999" name="add-candy-gtin" />
           <small id="add-candy-gtin-help" class="form-text text-muted">To help identifying sweets and candies add GTIN, approx. 13 digit number under/above the barcode.</small>
         </div>
         <div class="form-group">
@@ -62,7 +62,7 @@
       <small id="candy-date-help" class="form-text text-muted">dd-mm-yyyy</small>
     </div>
     <input type="hidden" name="tokenc" value="{{ session.tokenc }}" />
-    <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+    <button type="submit" id="diary-submit" class="btn btn-primary btn-lg">Submit</button>
   </form>
 </div>
 {% endif %}
@@ -146,9 +146,32 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 <script type="text/javascript">
   let entries = [{% for e in daily_entries %}{
-        "date": "{{ e.entry_time }}",
-        "total": {{ e.total }}
-      },{% endfor %}];
+    "date": "{{ e.entry_time }}",
+    "total": {{ e.total }}
+  },{% endfor %}];
+
+  $(document).ready(function(){
+    $('#diary-submit').click(function(e){
+      e.preventDefault()
+      let sub = true
+      $('[name=add-candy-name]').val(function(n,c){
+        return c.trim()
+      })
+      console.log($('[name=add-candy-name]').val())
+      if ($('#select-candy').val() === '' && $('[name=add-candy-name]').val().length === 0){
+        console.log("select candy ja/tai add-candy-name tyhjiä")
+        $('#select-candy').addClass('is-invalid')
+        $('[name=add-candy-name]').addClass('is-invalid')
+        sub = false
+      }else{
+        $('#select-candy').removeClass('is-invalid')
+        $('[name=add-candy-name]').removeClass('is-invalid')
+      }
+      if(sub){
+        $('#diary-form').submit()
+      }
+    })
+  })
 </script>
 <script src="{{ url_for('static', filename='chart.js') }}"></script>
 {% endblock %}
