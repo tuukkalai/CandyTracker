@@ -3,9 +3,7 @@
 
 Sovellus löytyy osoitteesta https://candytracker.herokuapp.com/
 
-Käyttäjänimellä `user` ja salasanalla `asdf1234` pääsee kirjautumaan sisään.
-
-Uuden käyttäjän voi luoda valitsemalla 'Sign up'.
+Uuden käyttäjän saa luotua klikkaamalla 'Sign up' tai sisäänkirjaus onnistuu myös testikäyttäjällä `testduudyksi` (ja salasanalla `salasana`).
 
 ## What?
 
@@ -36,12 +34,14 @@ CandyTrackerissä voit muodostaa kavereiden, tai vaikka tuntemattomien kanssa ry
 - [x] Käyttäjä voi tarkastella omaa sokerin/makeisten kulutuksta
 
 #### Ryhmätoiminnot
-- [ ] Käyttäjä voi luoda ryhmän
-- [ ] Käyttäjä voi etsiä ryhmiä
-- [ ] Käyttäjä voi liittyä ryhmään
-- [ ] Käyttäjä voi poistua ryhmästä
-- [ ] Käyttäjä voi luoda haasteen/tavoitteen ryhmässä
-- [ ] Käyttäjä voi lähettää viestin ryhmässä
+- [x] Käyttäjä voi luoda ryhmän
+- [x] Käyttäjä voi pyytää liittymistä avoimeen ryhmään
+- [x] Käyttäjä voi poistua ryhmästä
+- [x] Käyttäjä voi aktivoida haasteen/tavoitteen ryhmässä
+- [x] Käyttäjä voi lähettää viestin ryhmässä
+
+Ryhmien ensimmäinen käyttäjä (luoja) on admin, ja hän näkee hieman enemmän ryhmissä kuin muut.
+Jos admin poistaa itsensä ryhmästä, toiseksi vanhimmasta ryhmäläisestä tulee admin.
 
 ## Sovelluksen suorittaminen
 
@@ -65,26 +65,26 @@ $ source venv/bin/activate
 ## Kurssiin liittyvät vaatimukset
 
 ### Yleiskuva
-- [ ] Sovellus toimii, kun käyttäjä testaa sitä
-- [ ] Sovellusta on mukavaa käyttää ja on selvää, mitä toiminnot tekevät
-- [ ] Jos käyttäjä antaa väärää tietoa, tästä tulee selkeä ilmoitus
-- [ ] Sovelluksen käyttöliittymä ja ulkoasu ovat viimeisteltyjä
-- [ ] Tiedosto README.md antaa hyvän kuvan sovelluksesta
+- [x] Sovellus toimii, kun käyttäjä testaa sitä
+- [x] Sovellusta on mukavaa käyttää ja on selvää, mitä toiminnot tekevät
+- [x] Jos käyttäjä antaa väärää tietoa, tästä tulee selkeä ilmoitus
+- [x] Sovelluksen käyttöliittymä ja ulkoasu ovat viimeisteltyjä
+- [x] Tiedosto README.md antaa hyvän kuvan sovelluksesta
 ### Tekninen toteutus
-- [ ] Koodia on helppo lukea ja muuttujien, funktioiden, jne. nimet on valittu hyvin
-- [ ] Koodi on tiivistä ja suoraviivaista
-- [ ] Koodi on jaettu järkevästi osiin tiedostoiksi ja funktioiksi
-- [ ] Koodin tyyli on yhdenmukainen kaikissa sovelluksen osissa
-- [ ] Versionhallinnassa commitit ja niiden viestit on tehty hyvin
+- [x] Koodia on helppo lukea ja muuttujien, funktioiden, jne. nimet on valittu hyvin
+- [-] Koodi on tiivistä ja suoraviivaista
+- [x] Koodi on jaettu järkevästi osiin tiedostoiksi ja funktioiksi
+- [x] Koodin tyyli on yhdenmukainen kaikissa sovelluksen osissa
+- [x] Versionhallinnassa commitit ja niiden viestit on tehty hyvin
 ### Tietokanta-asiat
-- [ ] Tietokanta on suunniteltu järkevästi sovelluksen vaatimusten mukaisesti
-- [ ] Taulut ja sarakkeet on nimetty selkeästi ja yhdenmukaisesti
-- [ ] Tauluissa on käytetty viiteavaimia ja tarvittaessa muita määreitä
-- [ ] SQL-kyselyt on toteutettu suoraviivaisesti eikä haeta turhaa tietoa
-- [ ] Jos tiedot voi hakea järkevästi yhdellä kyselyllä, ei suoriteta useita kyselyjä
+- [x] Tietokanta on suunniteltu järkevästi sovelluksen vaatimusten mukaisesti
+- [x] Taulut ja sarakkeet on nimetty selkeästi ja yhdenmukaisesti
+- [x] Tauluissa on käytetty viiteavaimia ja tarvittaessa muita määreitä
+- [x] SQL-kyselyt on toteutettu suoraviivaisesti eikä haeta turhaa tietoa
+- [x] Jos tiedot voi hakea järkevästi yhdellä kyselyllä, ei suoriteta useita kyselyjä
 ### Tietoturva
-- [ ] Käyttäjät pääsevät näkemään vain tietoja, joihin heillä on oikeus
-- [ ] Käyttäjän syöte tarkastetaan ennen tietokantakomentoja
-- [ ] Sovelluksessa ei ole SQL-injektion mahdollisuutta eikä XSS- ja CSRF-haavoittuvuuksia
-- [ ] Salasanat tallennetaan tietokantaan asianmukaisesti
-- [ ] Versionhallinnassa ei ole salaista tietoa (kuten .env-tiedostoa)
+- [x] Käyttäjät pääsevät näkemään vain tietoja, joihin heillä on oikeus
+- [x] Käyttäjän syöte tarkastetaan ennen tietokantakomentoja
+- [x] Sovelluksessa ei ole SQL-injektion mahdollisuutta eikä XSS- ja CSRF-haavoittuvuuksia
+- [x] Salasanat tallennetaan tietokantaan asianmukaisesti
+- [x] Versionhallinnassa ei ole salaista tietoa (kuten .env-tiedostoa)
