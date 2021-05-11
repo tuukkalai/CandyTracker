@@ -1,5 +1,5 @@
 from app import app
-from flask import flash, redirect, render_template, request, session, abort, jsonify
+from flask import flash, redirect, render_template, request, session, abort, jsonify, send_from_directory
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from db import db
@@ -8,6 +8,11 @@ import entries
 import candies
 import groups
 import json
+
+# Updated SPA view with Svelte
+@app.route("/<path:path>")
+def svelte_client(path):
+    return send_from_directory('./svelte/public/', path)
 
 # Root
 @app.route("/")
