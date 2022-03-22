@@ -103,6 +103,7 @@ def diary():
     if request.method == "POST":
         candy = request.form["select-candy"]
         date = request.form["candy-date"]
+        print('adding entry with date: ', date)
         tokenc = request.form["tokenc"]
         new_name = request.form["add-candy-name"]
         new_company = request.form["add-candy-company"]

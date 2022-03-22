@@ -85,7 +85,7 @@ def get_all_entries():
             ON e.candy_id=c.id 
             WHERE e.user_id=:user 
             AND e.visible=true 
-            ORDER BY entry_time DESC"""
+            ORDER BY e.entry_time DESC"""
     result = db.session.execute(sql,{"user": user})
     data = result.fetchall()
     return data

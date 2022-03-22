@@ -50,7 +50,7 @@ $(document).ready(function(){
       }
     },
     format(date) {
-      return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`
+      return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
     },
   }
 
