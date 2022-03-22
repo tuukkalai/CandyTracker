@@ -50,7 +50,7 @@ $(document).ready(function(){
       }
     },
     format(date) {
-      return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+      return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`
     },
   }
 
@@ -68,6 +68,7 @@ $(document).ready(function(){
     dayNames: WEEKDAYS,
     monthNames: MONTHS,
     monthNamesShort: MONTHS.map(m => m.substring(0,3)),
+    locale: "fi-FI",
   }
 
   // Chart options
