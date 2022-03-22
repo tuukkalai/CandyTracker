@@ -1,18 +1,10 @@
 from app import app
-from flask import flash, redirect, render_template, request, session, abort, jsonify, send_from_directory
-from werkzeug.security import check_password_hash, generate_password_hash
+from flask import flash, redirect, render_template, request, abort
 
-from db import db
 import users
 import entries
 import candies
 import groups
-import json
-
-# Updated SPA view with Svelte
-@app.route("/<path:path>")
-def svelte_client(path):
-    return send_from_directory('./svelte/public/', path)
 
 # Root
 @app.route("/")
@@ -85,7 +77,11 @@ def register():
         if users.create_user(username, password, passwordAgain):
             return redirect("/")
         else:
-            return render_template("new_user.html", username=username, notification="Username already taken, or password mismatch")
+            return render_template(
+                "new_user.html",
+                username=username,
+                notification="Username already taken, or password mismatch"
+            )
 
 # Diary
 @app.route("/diary", methods=["GET", "POST"])
@@ -97,7 +93,13 @@ def diary():
         daily_entries = entries.get_sum_of_days()
         user_data = entries.get_additional_user_data()
         all_entries = entries.get_all_entries()
-        return render_template("diary.html", candies=all_candies, daily_entries=daily_entries, user_data=user_data, all_entries=all_entries)
+        return render_template(
+            "diary.html",
+            candies=all_candies,
+            daily_entries=daily_entries,
+            user_data=user_data,
+            all_entries=all_entries
+        )
     if request.method == "POST":
         candy = request.form["select-candy"]
         date = request.form["candy-date"]
@@ -109,7 +111,14 @@ def diary():
         new_gtin = request.form["add-candy-gtin"]
         new_category = request.form["add-candy-category"]
         if new_name != '':
-            candy = candies.add_candy(new_name, new_company, new_weight, new_sugar, new_gtin, new_category)
+            candy = candies.add_candy(
+                new_name,
+                new_company,
+                new_weight,
+                new_sugar,
+                new_gtin,
+                new_category
+            )
         if entries.add_entry(candy, date, tokenc):
             return redirect("/diary")
 
@@ -161,7 +170,6 @@ def get_single_group(group_id):
         previous_challenges = groups.get_20_previous_challenges(group_id)
         for ch in previous_challenges:
             prev_challenges.append([ch.id, ch.name, groups.get_no_of_users_still_in_the_race(group_id, ch.id)])
-        print(prev_challenges)
         return render_template("group.html", 
                                 group_id=group_id, 
                                 group_info=group_info, 
@@ -174,13 +182,13 @@ def get_single_group(group_id):
 @app.route("/groups/<int:group_id>/<string:action>/<string:username>", methods=["GET"])
 def allow_reject_user_group(action, group_id, username):
     if action == "accept" and groups.accept_user_to_group(group_id, username):
-        return redirect("/groups/"+str(group_id))
+        return redirect("/groups/" + str(group_id))
     if action == "reject" and groups.reject_user_from_group(group_id, username):
-        return redirect("/groups/"+str(group_id))
+        return redirect("/groups/" + str(group_id))
     if action == "remove" and groups.remove_member_from_group(group_id, username):
         if username == users.username():
             return redirect("/groups")
-        return redirect("/groups/"+str(group_id))
+        return redirect("/groups/" + str(group_id))
 
 @app.route("/groups/<int:group_id>/request", methods=['GET'])
 def request_to_group(group_id):
@@ -202,7 +210,7 @@ def toggle_group_public_private(group_id):
 def send_message(group_id):
     content = request.form["msg"]
     if groups.send_message(group_id, content):
-        return redirect("/groups/"+str(group_id))
+        return redirect("/groups/" + str(group_id))
 
 @app.route("/groups/<int:group_id>/newchallenge", methods=["POST"])
 def start_challenge(group_id):
@@ -211,4 +219,4 @@ def start_challenge(group_id):
         flash("Challenge started")
     else:
         flash("Unable to start that challenge")
-    return redirect("/groups/"+str(group_id))
+    return redirect("/groups/" + str(group_id))

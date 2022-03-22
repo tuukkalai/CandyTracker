@@ -80,12 +80,14 @@
       <button type="button" class="btn btn-secondary" id="range-92">Last 3 months</button>
     </div>
   </div>
-  <h4 class="h4 my-4">Your additional stats</h4>
+  <h4 class="h4 my-4">Your stats</h4>
   <div class="row row-cols-1 row-cols-md-2">
     <div class="col mb-4">
       <div class="card">          
         <div class="card-body">
-          <h5 class="card-title" id="amount-of-entries">{%+ if user_data.count %}{{ user_data.count }}{% else %}No values{% endif %}</h5>
+          <h5 class="card-title" id="amount-of-entries">
+            {%+ if user_data.count %}{{ user_data.count }}{% else %}No values{% endif %}
+          </h5>
           <p class="card-text">Total amount of entries</p>
         </div>
       </div>
@@ -93,7 +95,9 @@
     <div class="col mb-4">
       <div class="card">          
         <div class="card-body">
-          <h5 class="card-title" id="amount-of-candies">{%+ if user_data.sum %}{{ user_data.sum }} kg{% else %}No values{% endif %}</h5>
+          <h5 class="card-title" id="amount-of-candies">
+            {%+ if user_data.sum %}{{ user_data.sum }} kg{% else %}No values{% endif %}
+          </h5>
           <p class="card-text">Amount of candies consumed</p>
         </div>
       </div>
@@ -101,7 +105,9 @@
     <div class="col mb-4">
       <div class="card">          
         <div class="card-body">
-          <h5 class="card-title" id="amount-of-sugar">{%+ if user_data.sugar %}{{ user_data.sugar }} g{% else %}No values{% endif %}</h5>
+          <h5 class="card-title" id="amount-of-sugar">
+            {%+ if user_data.sugar %}{{ user_data.sugar }} kg{% else %}No values{% endif %}
+          </h5>
           <p class="card-text">Amount of sugar consumed</p>
         </div>
       </div>
@@ -110,7 +116,7 @@
       <div class="card">          
         <div class="card-body">
           {%+ if user_data.diff %}<h5 class="card-title{%+ if user_data.diff < 0 %} text-success{% else %} text-danger{% endif %}" id="difference">{%+ if user_data.diff > 0 %}+{% endif %}{{ user_data.diff }} g</h5>{% else %}<h5 class="card-title">No values</h5>{% endif %}
-          <p class="card-text">Difference in candy consumption between last week and the week before</p>
+          <p class="card-text">Difference in candy consumption between last 7 days and 7 days prior</p>
         </div>
       </div>
     </div>
@@ -124,7 +130,7 @@
       <thead>
         <tr>
           <th scope="col">Candy</th>
-          <th scope="col">Date (YYYY-MM-DD)</th>
+          <th scope="col">Date (dd.mm.yyyy)</th>
           <th scope="col">Remove</th>
         </tr>
       </thead>
@@ -146,7 +152,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 <script type="text/javascript">
   let entries = [{% for e in daily_entries %}{
-    "date": "{{ e.entry_time }}",
+    "date": "{{ e.entry_time }}",
     "total": {{ e.total }}
   },{% endfor %}];
 

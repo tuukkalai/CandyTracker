@@ -7,7 +7,7 @@ def add_entry(candy, date, tokenc):
         abort(403)
     try:
         user = users.user_id()
-        sql = """INSERT INTO entries (user_id, candy_id, entry_time) 
+        sql = """INSERT INTO entries (user_id, candy_id, entry_time)
                 VALUES (:user, :candy, :date)"""
         db.session.execute(sql,{"user":user,"candy":candy,"date":date})
         db.session.commit()
@@ -69,19 +69,22 @@ def get_additional_user_data():
             ON e.candy_id=c.id 
             WHERE e.user_id=:user 
             AND e.visible=true"""
-    result = db.session.execute(sql,{"user":user})
+    result = db.session.execute(sql,{"user": user})
     data = result.fetchone()
     return data
 
 def get_all_entries():
     user = users.user_id()
-    sql = """SELECT e.id, c.name, CAST(e.entry_time AS DATE) 
+    sql = """SELECT 
+                e.id,
+                c.name,
+                TO_CHAR(e.entry_time :: DATE, 'dd.mm.yyyy') AS entry_time
             FROM entries e 
             INNER JOIN candies c 
             ON e.candy_id=c.id 
             WHERE e.user_id=:user 
             AND e.visible=true 
             ORDER BY entry_time DESC"""
-    result = db.session.execute(sql,{"user":user})
+    result = db.session.execute(sql,{"user": user})
     data = result.fetchall()
     return data

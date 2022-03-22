@@ -12,7 +12,8 @@ CREATE TABLE users (
   username TEXT UNIQUE NOT NULL,
   password TEXT NOT NULL,
   auth TEXT NOT NULL DEFAULT 'user',
-  joined TIMESTAMP DEFAULT NOW()
+  joined TIMESTAMP DEFAULT NOW(),
+  visible BOOLEAN NOT NULL DEFAULT true
 );
 CREATE TABLE entries (
   id SERIAL PRIMARY KEY,
@@ -26,7 +27,8 @@ CREATE TABLE groups (
   name TEXT UNIQUE NOT NULL,
   members INTEGER[],
   open BOOLEAN NOT NULL DEFAULT false,
-  visible BOOLEAN NOT NULL DEFAULT true
+  visible BOOLEAN NOT NULL DEFAULT true,
+  requests INTEGER[]
 );
 CREATE TABLE messages (
   id SERIAL PRIMARY KEY,
