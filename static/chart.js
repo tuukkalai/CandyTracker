@@ -36,6 +36,11 @@ $(document).ready(function(){
   const currentISODate = date.getFullYear() + '-' + ('0' + (date.getMonth()+1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2)
   picker.value = currentISODate
   picker.max = currentISODate
+  console.log(currentISODate);
+
+  picker.addEventListener("duetChange", function (e) {
+    console.log("selected date", e.detail.valueAsDate)
+  })
 
   picker.dateAdapter = {
     parse(value = "", createDate) {
@@ -45,13 +50,13 @@ $(document).ready(function(){
       }
     },
     format(date) {
-      return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
+      return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`
     },
   }
 
   picker.localization = {
     buttonLabel: "Select date",
-    placeholder: "dd-mm-yyyy",
+    placeholder: "dd.mm.yyyy",
     selectedDateMessage: "Selected date is",
     prevMonthLabel: "Previous month",
     nextMonthLabel: "Next month",
