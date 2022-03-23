@@ -160,14 +160,11 @@
   $(document).ready(function(){
     $('#diary-submit').click(function(e){
       e.preventDefault()
-      console.log('lisäys pvm: ', $('[name=candy-date]').val());
       let sub = true
       $('[name=add-candy-name]').val(function(n,c){
         return c.trim()
       })
-      console.log('uuden karkin nimi: ', $('[name=add-candy-name]').val())
       if ($('#select-candy').val() === '' && $('[name=add-candy-name]').val().length === 0){
-        console.log("select-candy ja add-candy-name tyhjiä")
         $('#select-candy').addClass('is-invalid')
         $('[name=add-candy-name]').addClass('is-invalid')
         sub = false
@@ -176,7 +173,8 @@
         $('[name=add-candy-name]').removeClass('is-invalid')
       }
       if(sub){
-        $('#diary-form').submit()
+        $('#date').val($('[name=candy-date]').val());
+        $('#diary-form').submit();
       }
     })
   })
