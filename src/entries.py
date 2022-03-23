@@ -2,6 +2,7 @@ from flask import session, abort
 from db import db
 import users
 
+
 def add_entry(candy, date, tokenc):
     if tokenc != session["tokenc"]:
         abort(403)
@@ -10,21 +11,23 @@ def add_entry(candy, date, tokenc):
         print('Inserting date: ', date)
         sql = """INSERT INTO entries (user_id, candy_id, entry_time)
                 VALUES (:user, :candy, :date)"""
-        db.session.execute(sql,{"user": user, "candy": candy, "date": date})
+        db.session.execute(sql, {"user": user, "candy": candy, "date": date})
         db.session.commit()
         return True
     except:
         return False
 
+
 def delete_entry(id):
     try:
         user = users.user_id()
         sql = "UPDATE entries SET visible=false WHERE user_id=:user AND id=:id"
-        db.session.execute(sql,{"user":user,"id":id})
+        db.session.execute(sql, {"user": user, "id": id})
         db.session.commit()
         return True
     except:
         return False
+
 
 def get_sum_of_days():
     user = users.user_id()
@@ -36,9 +39,10 @@ def get_sum_of_days():
             AND e.entry_time >= NOW()-INTERVAL '92 DAYS' 
             AND e.visible=true 
             GROUP BY e.entry_time"""
-    result = db.session.execute(sql,{"user":user})
+    result = db.session.execute(sql, {"user": user})
     sums = result.fetchall()
     return sums
+
 
 def get_additional_user_data():
     user = users.user_id()
@@ -70,9 +74,10 @@ def get_additional_user_data():
             ON e.candy_id=c.id 
             WHERE e.user_id=:user 
             AND e.visible=true"""
-    result = db.session.execute(sql,{"user": user})
+    result = db.session.execute(sql, {"user": user})
     data = result.fetchone()
     return data
+
 
 def get_all_entries():
     user = users.user_id()
@@ -86,6 +91,6 @@ def get_all_entries():
             WHERE e.user_id=:user 
             AND e.visible=true 
             ORDER BY e.entry_time DESC"""
-    result = db.session.execute(sql,{"user": user})
+    result = db.session.execute(sql, {"user": user})
     data = result.fetchall()
     return data
