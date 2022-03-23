@@ -119,12 +119,6 @@ def diary():
                 new_gtin,
                 new_category
             )
-        print('-'*10)
-        print('Adding entry')
-        print(f'{date:12} {candy}')
-        print('Complete form')
-        print(request.form)
-        print('-'*10)
         if entries.add_entry(candy, date, tokenc):
             return redirect("/diary")
 

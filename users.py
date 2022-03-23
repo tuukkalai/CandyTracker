@@ -34,8 +34,11 @@ def user_id():
 def username():
     return session.get("username",0)
 
+def auth():
+    return session.get("auth",0)
+
 def login(username, password):
-    sql = """SELECT password, id 
+    sql = """SELECT password, id, auth
             FROM users 
             WHERE username=:username 
             AND visible=true"""
@@ -43,21 +46,22 @@ def login(username, password):
     user = result.fetchone()
     if user == None:
         return False
+    elif check_password_hash(user[0],password):
+        # If user credentials are correct add items to session
+        session["user_id"] = user[1]
+        session["username"] = username
+        session["auth"] = user[2]
+        session["tokenc"] = os.urandom(16).hex()
+        return True
     else:
-        if check_password_hash(user[0],password):
-            # If user credentials are correct add items to session
-            session["user_id"] = user[1]
-            session["username"] = username
-            session["tokenc"] = os.urandom(16).hex()
-            return True
-        else:
-            return False
+        return False
 
 def logout():
     # Remove added items from session
     del session["user_id"]
     del session["tokenc"]
     del session["username"]
+    del session["auth"]
     return True
 
 def change_password(password, password2, oldPassword, tokenc):

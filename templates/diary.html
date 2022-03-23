@@ -21,7 +21,7 @@
         <option></option>
       {% for item in candies %}
         <option value="{{ item.id }}">
-          {{ item.name }} ({{ item.size }} g) - <span style="font-style:italic;">{{ item.company }}</span></option>
+          {{ item.name }} ({{ item.size }} g) - {{ item.company }}</option>
       {% endfor %}
       </select>
       <small id="candy-search-help" class="form-text text-muted">If candy not found, create entry with new by clicking <a href="#" data-toggle="collapse" data-target="#add-candy" aria-expanded="false" aria-controls="add-candy">here</a></small>
