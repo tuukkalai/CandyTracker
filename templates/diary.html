@@ -20,7 +20,7 @@
       <select id="select-candy" class="form-control" name="select-candy">
         <option></option>
       {% for item in candies %}
-        <option value="{{ item.id }}">{{ item.name }} ({{ item.size }} g) - {{ item.company }}</span></option>
+        <option value="{{ item.id }}">{{ item.name }} ({{ item.size }} g) - {{ item.company }}</span></option>
       {% endfor %}
       </select>
       <small id="candy-search-help" class="form-text text-muted">If candy not found, create entry with new by clicking <a href="#" data-toggle="collapse" data-target="#add-candy" aria-expanded="false" aria-controls="add-candy">here</a></small>
@@ -58,7 +58,7 @@
     </div>
     <div class="form-group">
       <label for="date">Choose a date</label>
-      <duet-date-picker name="candy-date" identifier="date" value="2022-02-22" placeholder="dd.mm.yyyy" max="2022-03-22"></duet-date-picker>
+      <duet-date-picker name="candy-date" identifier="date" value="2022-02-22" max="2022-03-22"></duet-date-picker>
       <small id="candy-date-help" class="form-text text-muted">dd.mm.yyyy</small>
     </div>
     <input type="hidden" name="tokenc" value="{{ session.tokenc }}" />
@@ -159,13 +159,14 @@
   $(document).ready(function(){
     $('#diary-submit').click(function(e){
       e.preventDefault()
+      console.log('lisäys pvm: ', $('[name=candy-date]').val());
       let sub = true
       $('[name=add-candy-name]').val(function(n,c){
         return c.trim()
       })
-      console.log($('[name=add-candy-name]').val())
+      console.log('uuden karkin nimi: ', $('[name=add-candy-name]').val())
       if ($('#select-candy').val() === '' && $('[name=add-candy-name]').val().length === 0){
-        console.log("select candy ja/tai add-candy-name tyhjiä")
+        console.log("select-candy ja add-candy-name tyhjiä")
         $('#select-candy').addClass('is-invalid')
         $('[name=add-candy-name]').addClass('is-invalid')
         sub = false
