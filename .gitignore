@@ -1,3 +1,9 @@
+# Robot reports
+selenium-screenshot-*
+report.html
+log.html
+output.xml
+
 # Training material + database init values
 training.py
 database_init.sql
