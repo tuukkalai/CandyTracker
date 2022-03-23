@@ -103,7 +103,6 @@ def diary():
     if request.method == "POST":
         candy = request.form["select-candy"]
         date = request.form["candy-date"]
-        print('adding entry with date: ', date)
         tokenc = request.form["tokenc"]
         new_name = request.form["add-candy-name"]
         new_company = request.form["add-candy-company"]
@@ -120,6 +119,12 @@ def diary():
                 new_gtin,
                 new_category
             )
+        print('-'*10)
+        print('Adding entry')
+        print(f'{date:12} {candy}')
+        print('Complete form')
+        print(request.form)
+        print('-'*10)
         if entries.add_entry(candy, date, tokenc):
             return redirect("/diary")
 

@@ -20,7 +20,8 @@
       <select id="select-candy" class="form-control" name="select-candy">
         <option></option>
       {% for item in candies %}
-        <option value="{{ item.id }}">{{ item.name }} ({{ item.size }} g) - {{ item.company }}</span></option>
+        <option value="{{ item.id }}">
+          {{ item.name }} ({{ item.size }} g) - <span style="font-style:italic;">{{ item.company }}</span></option>
       {% endfor %}
       </select>
       <small id="candy-search-help" class="form-text text-muted">If candy not found, create entry with new by clicking <a href="#" data-toggle="collapse" data-target="#add-candy" aria-expanded="false" aria-controls="add-candy">here</a></small>
@@ -47,12 +48,12 @@
         </div>
         <div class="form-group">
           <label for="add-candy-gtin">Global Trade Item Number (GTIN)</label>
-          <input class="form-control" type="number" min="100000000000" max="99999999999999" name="add-candy-gtin" />
-          <small id="add-candy-gtin-help" class="form-text text-muted">To help identifying sweets and candies add GTIN, approx. 13 digit number under/above the barcode.</small>
+          <input class="form-control" type="number" min="0" max="99999999999999" name="add-candy-gtin" />
+          <small id="add-candy-gtin-help" class="form-text text-muted">To help identifying sweets and candies add GTIN. 8-14 number under/above the barcode.</small>
         </div>
         <div class="form-group">
           <label for="add-candy-category">Category</label>
-          <input class="form-control"type="text" name="add-candy-category" />
+          <input class="form-control" type="text" name="add-candy-category" />
         </div>
       </div>
     </div>
